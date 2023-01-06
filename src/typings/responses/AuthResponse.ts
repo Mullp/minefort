@@ -1,4 +1,4 @@
-export enum AuthStatus {
+export enum AuthResponseStatus {
   INVALID_INPUT = 'INVALID_INPUT',
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
   OK = 'OK',
@@ -8,7 +8,7 @@ export type AuthResponse = {
   time: number;
 } & (
   | {
-      status: AuthStatus.INVALID_INPUT;
+      status: AuthResponseStatus.INVALID_INPUT;
       error: {
         body: {
           message: string;
@@ -24,10 +24,10 @@ export type AuthResponse = {
       };
     }
   | {
-      status: AuthStatus.INVALID_CREDENTIALS;
+      status: AuthResponseStatus.INVALID_CREDENTIALS;
     }
   | {
-      status: AuthStatus.OK;
+      status: AuthResponseStatus.OK;
       result: {};
     }
 );
