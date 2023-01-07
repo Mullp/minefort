@@ -1,6 +1,14 @@
 import {BaseClass} from './Base';
 import {Client} from '../lib';
-import {Icon, Player, ServerResponse} from '../typings';
+import {
+  Icon,
+  Player,
+  ResponseStatus,
+  ServerResponse,
+  ServerStartResponse,
+  ServerWakeupResponse,
+} from '../typings';
+import fetch from 'cross-fetch';
 
 export class Server extends BaseClass {
   public readonly id: string;
@@ -13,7 +21,11 @@ export class Server extends BaseClass {
   public readonly unlockedIcons: Icon[];
   public readonly settings: {lobbyVisible: boolean; startupCommand: number};
   public readonly motd: string;
-  public readonly playerData: {playerCount: number; online: Player[]; maxPlayers: number};
+  public readonly playerData: {
+    playerCount: number;
+    online: Player[];
+    maxPlayers: number;
+  };
   public readonly ftp: {password: string};
 
   public constructor(client: Client, data: ServerResponse) {
@@ -40,5 +52,55 @@ export class Server extends BaseClass {
       maxPlayers: data.players.max,
     };
     this.ftp = {password: data.ftp.password};
+  }
+
+  public async wakeup(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/wakeup`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(value => value.json() as Promise<ServerWakeupResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may already be running.');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async start(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/start`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerStartResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error(
+            'Invalid state. Server may already be running or asleep.'
+          );
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
   }
 }

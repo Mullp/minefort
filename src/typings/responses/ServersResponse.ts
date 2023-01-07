@@ -33,7 +33,7 @@ export type ServersResponse = {
 export type Player = {
   name: string;
   uuid: string;
-}
+};
 
 export type ServerWakeupResponse = {
   time: number;
