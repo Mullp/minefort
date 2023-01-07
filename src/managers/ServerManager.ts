@@ -33,10 +33,9 @@ export class ServerManager extends BaseManager {
 
   public async get(serverId: string): Promise<Server | void> {
     return await this.getAll()
-      .then(servers =>
-        servers.find(server => server.id === serverId))
+      .then(servers => servers.find(server => server.id === serverId))
       .catch(error => {
         throw error;
-      })
+      });
   }
 }
