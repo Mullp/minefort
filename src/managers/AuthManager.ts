@@ -1,7 +1,7 @@
 import {BaseManager} from './BaseManager';
 import {Client} from '../lib';
 import fetch from 'cross-fetch';
-import {AuthResponse, AuthResponseStatus} from '../typings';
+import {AuthResponse, ResponseStatus} from '../typings';
 
 export class AuthManager extends BaseManager {
   public constructor(client: Client) {
@@ -29,14 +29,14 @@ export class AuthManager extends BaseManager {
         ]);
       })
       .then(value => {
-        if (value[0].status === AuthResponseStatus.OK) {
+        if (value[0].status === ResponseStatus.OK) {
           if (value[1]) {
             this.client.sessionCookie = value[1];
           }
           return true;
-        } else if (value[0].status === AuthResponseStatus.INVALID_CREDENTIALS) {
+        } else if (value[0].status === ResponseStatus.INVALID_CREDENTIALS) {
           throw new Error('Invalid credentials');
-        } else if (value[0].status === AuthResponseStatus.INVALID_INPUT) {
+        } else if (value[0].status === ResponseStatus.INVALID_INPUT) {
           throw new Error('Invalid input: ' + value[0].error.body[0].message);
         }
 
