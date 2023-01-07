@@ -2,15 +2,38 @@ import {BaseManager} from './BaseManager';
 import {Client} from '../lib';
 import fetch from 'cross-fetch';
 import {
+  ResponseStatus,
+  ServersResponse,
   ServerStartResponse,
-  ServerStartResponseStatus,
   ServerWakeupResponse,
-  ServerWakeupResponseStatus
 } from '../typings';
+import {Server} from '../classes';
 
 export class ServerManager extends BaseManager {
   public constructor(client: Client) {
     super(client);
+  }
+
+  public async getAll(): Promise<Server[]> {
+    return await fetch(this.client.BASE_URL + '/user/servers', {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+      },
+    })
+      .then(res => res.json() as Promise<ServersResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result.map(server => new Server(this.client, server));
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        }
+
+        return [] as Server[];
+      })
+      .catch(error => {
+        throw error;
+      });
   }
 
   public async wakeup(serverId: string): Promise<boolean> {
@@ -23,13 +46,11 @@ export class ServerManager extends BaseManager {
     })
       .then(value => value.json() as Promise<ServerWakeupResponse>)
       .then(value => {
-        if (value.status === ServerWakeupResponseStatus.OK) {
+        if (value.status === ResponseStatus.OK) {
           return true;
-        } else if (
-          value.status === ServerWakeupResponseStatus.NOT_AUTHENTICATED
-        ) {
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
           throw new Error('Not authenticated');
-        } else if (value.status === ServerWakeupResponseStatus.INVALID_STATE) {
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may already be running.');
         }
 
@@ -50,16 +71,18 @@ export class ServerManager extends BaseManager {
     })
       .then(res => res.json() as Promise<ServerStartResponse>)
       .then(value => {
-        if (value.status === ServerStartResponseStatus.OK) {
+        if (value.status === ResponseStatus.OK) {
           return true;
-        } else if (value.status === ServerStartResponseStatus.INVALID_STATE) {
-          throw new Error("Invalid state. Server may already be running or asleep.")
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error(
+            'Invalid state. Server may already be running or asleep.'
+          );
         }
 
         return false;
       })
       .catch(error => {
         throw error;
-      })
+      });
   }
 }

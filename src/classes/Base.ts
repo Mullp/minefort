@@ -1,4 +1,4 @@
-import { Client } from "../lib";
+import {Client} from '../lib';
 
 export class BaseClass {
   public client: Client;

@@ -1,0 +1,5 @@
+export enum ResponseStatus {
+  OK = 'OK',
+  NOT_AUTHENTICATED = 'NOT_AUTHENTICATED',
+  INVALID_STATE = 'INVALID_STATE',
+}
