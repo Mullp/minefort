@@ -7,11 +7,11 @@ export type IconsResponse = {
   result: IconResponse[];
 };
 
-export type IconResponse = Icon & {
+export type IconResponse = BaseIcon & {
   credits: number;
 };
 
-export type Icon = {
+export type BaseIcon = {
   iconId: string;
   item: string;
   name: string;

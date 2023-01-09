@@ -1,7 +1,6 @@
 import {BaseClass} from './Base';
 import {Client} from '../lib';
 import {
-  Icon,
   Player,
   ResponseStatus,
   ServerResponse,
@@ -9,6 +8,7 @@ import {
   ServerWakeupResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
+import {Icon} from "./Icon";
 
 export class Server extends BaseClass {
   public readonly id: string;
@@ -33,14 +33,14 @@ export class Server extends BaseClass {
 
     this.id = data.serverId;
     this.name = data.serverName;
-    this.icon = data.serverIcon;
+    this.icon = new Icon(client, data.serverIcon);
     this.userId = data.userId;
     this.version = data.version;
     this.state = data.state;
     this.subscription = {
       currentPackageId: data.subscription.currentPackageId,
     };
-    this.unlockedIcons = data.unlockedIcons;
+    this.unlockedIcons = data.unlockedIcons.map(icon => new Icon(client, icon));
     this.settings = {
       lobbyVisible: data.settings.lobbyVisible,
       startupCommand: data.settings.startupCommand,

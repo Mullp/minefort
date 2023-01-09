@@ -1,17 +1,17 @@
 import {ResponseStatus} from './ResponseStatus';
-import {Icon} from './Icon';
+import {BaseIcon} from './Icon';
 
 export type ServerResponse = {
   serverId: string;
   serverName: string;
-  serverIcon: Icon;
+  serverIcon: BaseIcon;
   userId: string;
   version: string;
   state: number;
   subscription: {
     currentPackageId: number;
   };
-  unlockedIcons: Icon[];
+  unlockedIcons: BaseIcon[];
   settings: {lobbyVisible: boolean; startupCommand: number};
   messageOfTheDay: string;
   players: {online: number; list: Player[]; max: number};
