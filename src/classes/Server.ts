@@ -103,4 +103,29 @@ export class Server extends BaseClass {
         throw error;
       });
   }
+
+  public async stop(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/stop`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerStartResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error(
+            'Invalid state. Server may already be stopped or asleep.'
+          );
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
 }
