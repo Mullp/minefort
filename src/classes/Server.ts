@@ -8,7 +8,7 @@ import {
   ServerWakeupResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
-import {Icon} from "./Icon";
+import {Icon} from './Icon';
 
 export class Server extends BaseClass {
   public readonly id: string;

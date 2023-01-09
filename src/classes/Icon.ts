@@ -9,10 +9,7 @@ export class Icon extends BaseClass {
   public readonly image: string;
   public readonly credits?: number;
 
-  public constructor(
-    client: Client,
-    data: BaseIcon & Partial<IconResponse>
-  ) {
+  public constructor(client: Client, data: BaseIcon & Partial<IconResponse>) {
     super(client);
 
     this.id = data.iconId;
