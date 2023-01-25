@@ -15,7 +15,7 @@ import {Icon} from './Icon';
 
 /**
  * Represents a server of a user.
- * @extends{BaseClass}
+ * @extends {BaseClass}
  */
 export class Server extends BaseClass {
   /**
@@ -49,7 +49,7 @@ export class Server extends BaseClass {
     /**
      * The package id of the current active subscription.
      */
-    currentPackageId: number
+    currentPackageId: number;
   };
   /**
    * A list of {@link Icon}, that the server has unlocked.
@@ -67,7 +67,7 @@ export class Server extends BaseClass {
     /**
      * The state of when it can be started from the lobby.
      */
-    startupCommand: number
+    startupCommand: number;
   };
   /**
    * The MotD also known as "Message of the Day".
@@ -103,7 +103,7 @@ export class Server extends BaseClass {
     /**
      * The FTP password.
      */
-    password: string
+    password: string;
   };
 
   public constructor(client: Client, data: ServerResponse) {
@@ -266,9 +266,7 @@ export class Server extends BaseClass {
         } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
-          throw new Error(
-            'Invalid state. Server may be in hibernation'
-          );
+          throw new Error('Invalid state. Server may be in hibernation');
         }
 
         return false;
