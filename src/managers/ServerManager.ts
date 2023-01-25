@@ -1,7 +1,11 @@
 import {BaseManager} from './BaseManager';
 import {Client} from '../lib';
 import fetch from 'cross-fetch';
-import {ResponseStatus, ServersResponse} from '../typings';
+import {
+  ResponseStatus,
+  ServerNameAvailableResponse,
+  ServersResponse,
+} from '../typings';
 import {Server} from '../classes';
 
 export class ServerManager extends BaseManager {
@@ -34,6 +38,34 @@ export class ServerManager extends BaseManager {
   public async get(serverId: string): Promise<Server | void> {
     return await this.getAll()
       .then(servers => servers.find(server => server.id === serverId))
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async isNameAvailable(serverName: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + '/server/availability', {
+      method: 'POST',
+      body: JSON.stringify({
+        serverName: serverName,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerNameAvailableResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        }
+
+        return false;
+      })
       .catch(error => {
         throw error;
       });
