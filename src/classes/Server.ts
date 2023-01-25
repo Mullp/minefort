@@ -3,8 +3,11 @@ import {Client} from '../lib';
 import {
   Player,
   ResponseStatus,
+  ServerDeleteResponse,
+  ServerKillResponse,
   ServerResponse,
   ServerStartResponse,
+  ServerStopResponse,
   ServerWakeupResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
@@ -69,7 +72,7 @@ export class Server extends BaseClass {
         } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
-          throw new Error('Invalid state. Server may already be running.');
+          throw new Error('Invalid state. Server may already be running');
         }
 
         return false;
@@ -91,10 +94,98 @@ export class Server extends BaseClass {
       .then(value => {
         if (value.status === ResponseStatus.OK) {
           return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error(
-            'Invalid state. Server may already be running or asleep.'
+            'Invalid state. Server may already be running or asleep'
           );
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async stop(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/stop`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerStopResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error(
+            'Invalid state. Server may already be stopped or asleep'
+          );
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async kill(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/kill`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerKillResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error(
+            'Invalid state. Server may already be stopped or asleep'
+          );
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async delete(password: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        password: password,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerDeleteResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_CREDENTIALS) {
+          throw new Error('Invalid credentials');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be running');
         }
 
         return false;
