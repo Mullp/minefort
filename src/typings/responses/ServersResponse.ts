@@ -123,7 +123,8 @@ export type ServerDeleteResponse = {
     }
   | {
       status: ResponseStatus.INVALID_CREDENTIALS;
-    } | {
-    status: ResponseStatus.INVALID_STATE;
-}
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
 );
