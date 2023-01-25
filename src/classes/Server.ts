@@ -13,23 +13,98 @@ import {
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
 
+/**
+ * Represents a server of a user.
+ * @extends{BaseClass}
+ */
 export class Server extends BaseClass {
+  /**
+   * The server's id.
+   */
   public readonly id: string;
+  /**
+   * The server's name.
+   */
   public readonly name: string;
+  /**
+   * The icon of the server.
+   */
   public readonly icon: Icon;
+  /**
+   * The owner of the server's user id.
+   */
   public readonly userId: string;
+  /**
+   * The version of the server.
+   */
   public readonly version: string;
+  /**
+   * The state of the server.
+   */
   public readonly state: number;
-  public readonly subscription: {currentPackageId: number};
+  /**
+   * Information about the server's subscription.
+   */
+  public readonly subscription: {
+    /**
+     * The package id of the current active subscription.
+     */
+    currentPackageId: number
+  };
+  /**
+   * A list of {@link Icon}, that the server has unlocked.
+   */
   public readonly unlockedIcons: Icon[];
-  public readonly settings: {lobbyVisible: boolean; startupCommand: number};
+  /**
+   * The server's settings.
+   * Note this does not include the properties of the server.
+   */
+  public readonly settings: {
+    /**
+     * Whether the server is visible from the lobby.
+     */
+    lobbyVisible: boolean;
+    /**
+     * The state of when it can be started from the lobby.
+     */
+    startupCommand: number
+  };
+  /**
+   * The MotD also known as "Message of the Day".
+   */
   public readonly motd: string;
+  /**
+   * Information about online players.
+   */
   public readonly playerData: {
+    /**
+     * The amount of online players.
+     */
     playerCount: number;
+    /**
+     * A list of {@link Player} representing all online players.
+     */
     online: Player[];
+    /**
+     * The max amount of players allowed online at once.
+     */
     maxPlayers: number;
   };
-  public readonly ftp: {password: string};
+  /**
+   * Information about the server's FTP.
+   * Note: The FTP username is the server's {@link id}
+   * @example Connection information.
+   * Host: ftp.minefort.com
+   * Port: 21
+   * FTP Username: // The server's id
+   * FTP Password: // Stored under this.ftp.password
+   */
+  public readonly ftp: {
+    /**
+     * The FTP password.
+     */
+    password: string
+  };
 
   public constructor(client: Client, data: ServerResponse) {
     super(client);
@@ -57,6 +132,16 @@ export class Server extends BaseClass {
     this.ftp = {password: data.ftp.password};
   }
 
+  /**
+   * Wakes up the server.
+   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully woken up or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is already running.
+   * @example
+   * const success = await server.wakeup()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
   public async wakeup(): Promise<boolean> {
     return await fetch(this.client.BASE_URL + `/server/${this.id}/wakeup`, {
       method: 'POST',
@@ -82,6 +167,16 @@ export class Server extends BaseClass {
       });
   }
 
+  /**
+   * Starts up the server.
+   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully started up or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
+   * @example
+   * const success = await server.start()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
   public async start(): Promise<boolean> {
     return await fetch(this.client.BASE_URL + `/server/${this.id}/start`, {
       method: 'POST',
@@ -109,6 +204,16 @@ export class Server extends BaseClass {
       });
   }
 
+  /**
+   * Stops the server.
+   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully stopped or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
+   * @example
+   * const success = await server.stop()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
   public async stop(): Promise<boolean> {
     return await fetch(this.client.BASE_URL + `/server/${this.id}/stop`, {
       method: 'POST',
@@ -136,6 +241,16 @@ export class Server extends BaseClass {
       });
   }
 
+  /**
+   * Forces the server into stopping.
+   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully forced into stopping or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
+   * @example
+   * const success = await server.kill()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
   public async kill(): Promise<boolean> {
     return await fetch(this.client.BASE_URL + `/server/${this.id}/kill`, {
       method: 'POST',
@@ -152,7 +267,7 @@ export class Server extends BaseClass {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error(
-            'Invalid state. Server may already be stopped or asleep'
+            'Invalid state. Server may be in hibernation'
           );
         }
 
@@ -163,6 +278,17 @@ export class Server extends BaseClass {
       });
   }
 
+  /**
+   * Deletes the server.
+   * @param {string} password - The user's password of the server's owner.
+   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated, invalid input is given, invalid credentials, or invalid server state.
+   * @example
+   * const success = await server.delete()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
   public async delete(password: string): Promise<boolean> {
     return await fetch(this.client.BASE_URL + `/server/${this.id}`, {
       method: 'DELETE',
