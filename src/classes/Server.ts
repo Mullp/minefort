@@ -134,7 +134,7 @@ export class Server extends BaseClass {
 
   /**
    * Wakes up the server.
-   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully woken up or not.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully woken up or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is already running.
    * @example
    * const success = await server.wakeup()
@@ -169,7 +169,7 @@ export class Server extends BaseClass {
 
   /**
    * Starts up the server.
-   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully started up or not.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully started up or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
    * @example
    * const success = await server.start()
@@ -206,7 +206,7 @@ export class Server extends BaseClass {
 
   /**
    * Stops the server.
-   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully stopped or not.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully stopped or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
    * @example
    * const success = await server.stop()
@@ -243,7 +243,7 @@ export class Server extends BaseClass {
 
   /**
    * Forces the server into stopping.
-   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully forced into stopping or not.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully forced into stopping or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
    * @example
    * const success = await server.kill()
@@ -279,7 +279,7 @@ export class Server extends BaseClass {
   /**
    * Deletes the server.
    * @param {string} password - The user's password of the server's owner.
-   * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
    * @throws {Error} - Will throw an error if the user is not authenticated, invalid input is given, invalid credentials, or invalid server state.
    * @example
    * const success = await server.delete()

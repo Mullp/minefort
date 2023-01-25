@@ -3,11 +3,25 @@ import {Client} from '../lib';
 import fetch from 'cross-fetch';
 import {AuthResponse, ResponseStatus} from '../typings';
 
+/**
+ * Manages API methods for authentication.
+ * @extends {BaseManager}
+ */
 export class AuthManager extends BaseManager {
   public constructor(client: Client) {
     super(client);
   }
 
+  /**
+   * Authenticate a user.
+   * @param {string} email - Email address of the user.
+   * @param {string} password - Password of the user.
+   * @return {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the authentication was successful or not.
+   * @throws {Error} - Throws an error if the input or credentials are invalid.
+   * @example
+   * const authManager = client.authManager;
+   * const success = await authManager.authenticate('email', 'password');
+   */
   public async authenticate(email: string, password: string): Promise<boolean> {
     return await fetch(this.client.BASE_URL + '/auth/login', {
       method: 'POST',
