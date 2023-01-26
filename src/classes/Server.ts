@@ -5,6 +5,7 @@ import {
   ResponseStatus,
   ServerDeleteResponse,
   ServerKillResponse,
+  ServerNameChangeResponse,
   ServerResponse,
   ServerStartResponse,
   ServerStopResponse,
@@ -310,6 +311,38 @@ export class Server extends BaseClass {
           throw new Error('Invalid credentials');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be running');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async setName(serverName: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/name`, {
+      method: 'POST',
+      body: JSON.stringify({
+        serverName: serverName,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerNameChangeResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.SERVER_NAME_ALREADY_IN_USE) {
+          throw new Error('Server name is already in use by another Minefort server')
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
         }
 
         return false;

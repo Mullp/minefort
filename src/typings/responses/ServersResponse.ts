@@ -156,3 +156,35 @@ export type ServerNameAvailableResponse = {
       };
     }
 );
+
+export type ServerNameChangeResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    } | {
+    status: ResponseStatus.SERVER_NAME_ALREADY_IN_USE;
+}
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: {
+        body: {
+          message: string;
+          path: string[];
+          type: string;
+          context: {
+            value: string;
+            label: string;
+            key: string;
+          };
+        }[];
+      };
+    }
+);
