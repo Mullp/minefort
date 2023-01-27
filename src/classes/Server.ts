@@ -283,7 +283,7 @@ export class Server extends BaseClass {
    * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
    * @throws {Error} - Will throw an error if the user is not authenticated, invalid input is given, invalid credentials, or invalid server state.
    * @example
-   * const success = await server.delete()
+   * const success = await server.delete('password')
    *   .catch(error => {
    *     console.error(error);
    *   });
@@ -320,6 +320,17 @@ export class Server extends BaseClass {
       });
   }
 
+  /**
+   * Sets the name of the server.
+   * @param {string} serverName - The new name of the server.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully renamed or not.
+   * @throws {Error} - Will throw an error if the server name is already in use by another Minefort server, if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @example
+   * const success = await server.setName('new server name')
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
   public async setName(serverName: string): Promise<boolean> {
     return await fetch(this.client.BASE_URL + `/server/${this.id}/name`, {
       method: 'POST',
