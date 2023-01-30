@@ -347,7 +347,9 @@ export class Server extends BaseClass {
         if (value.status === ResponseStatus.OK) {
           return true;
         } else if (value.status === ResponseStatus.SERVER_NAME_ALREADY_IN_USE) {
-          throw new Error('Server name is already in use by another Minefort server')
+          throw new Error(
+            'Server name is already in use by another Minefort server'
+          );
         } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_INPUT) {

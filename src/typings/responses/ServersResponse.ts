@@ -1,13 +1,24 @@
 import {ResponseStatus} from './ResponseStatus';
 import {BaseIcon} from './Icon';
 
+export enum ServerState {
+  SLEEPING = 0,
+  ARCHIVING = 1,
+  DOWNLOADING = 2,
+  STARTING = 3,
+  ONLINE = 4,
+  OFFLINE = 5,
+  CREATING_BACKUP = 6,
+  RESTORING_BACKUP = 7,
+}
+
 export type ServerResponse = {
   serverId: string;
   serverName: string;
   serverIcon: BaseIcon;
   userId: string;
   version: string;
-  state: number;
+  state: ServerState;
   subscription: {
     currentPackageId: number;
   };
@@ -169,9 +180,10 @@ export type ServerNameChangeResponse = {
     }
   | {
       status: ResponseStatus.INVALID_STATE;
-    } | {
-    status: ResponseStatus.SERVER_NAME_ALREADY_IN_USE;
-}
+    }
+  | {
+      status: ResponseStatus.SERVER_NAME_ALREADY_IN_USE;
+    }
   | {
       status: ResponseStatus.INVALID_INPUT;
       error: {
