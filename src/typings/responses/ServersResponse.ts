@@ -21,12 +21,17 @@ export type ServerResponse = {
   state: ServerState;
   subscription: {
     currentPackageId: number;
+    nextPackageId?: number;
   };
   unlockedIcons: BaseIcon[];
   settings: {lobbyVisible: boolean; startupCommand: number};
   messageOfTheDay: string;
   players: {online: number; list: Player[]; max: number};
   ftp: {password: string};
+  backups: {
+    backupId: string;
+    date: string;
+  }[];
 };
 
 export type ServersResponse = {

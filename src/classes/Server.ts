@@ -51,6 +51,10 @@ export class Server extends BaseClass {
      * The package id of the current active subscription.
      */
     currentPackageId: number;
+    /**
+     * The package id of the next package.
+     */
+    nextPackageId?: number;
   };
   /**
    * A list of {@link Icon}, that the server has unlocked.
@@ -71,7 +75,7 @@ export class Server extends BaseClass {
     startupCommand: number;
   };
   /**
-   * The MotD also known as "Message of the Day".
+   * The server's MotD also known as "Message of the Day".
    */
   public readonly motd: string;
   /**
@@ -106,6 +110,19 @@ export class Server extends BaseClass {
      */
     password: string;
   };
+  /**
+   * The backups of the server.
+   */
+  public readonly backups?: {
+    /**
+     * The id of the backup.
+     */
+    backupId: string;
+    /**
+     * The date at which the backup was taken.
+     */
+    createdAt: Date;
+  }[];
 
   public constructor(client: Client, data: ServerResponse) {
     super(client);
@@ -118,6 +135,7 @@ export class Server extends BaseClass {
     this.state = data.state;
     this.subscription = {
       currentPackageId: data.subscription.currentPackageId,
+      nextPackageId: data.subscription.nextPackageId,
     };
     this.unlockedIcons = data.unlockedIcons.map(icon => new Icon(client, icon));
     this.settings = {
@@ -131,6 +149,12 @@ export class Server extends BaseClass {
       maxPlayers: data.players.max,
     };
     this.ftp = {password: data.ftp.password};
+    this.backups = data.backups?.map(backup => {
+      return {
+        backupId: backup.backupId,
+        createdAt: new Date(backup.date),
+      };
+    });
   }
 
   /**
