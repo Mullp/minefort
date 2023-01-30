@@ -66,6 +66,21 @@ export class AuthManager extends BaseManager {
       });
   }
 
+  /**
+   * Gets information on the current authenticated user.
+   * @return {Promise<GetMeReturn>} - A promise that resolves to an object of type {@link GetMeReturn}.
+   * @throws {Error} - Throws an error if not authenticated.
+   * @example
+   * const authManager = client.authManager;
+   * const me = await authManager.getMe();
+   * // me = {
+   * //   userId: string;
+   * //   emailAddress: string;
+   * //   credits: number;
+   * //   verified: boolean;
+   * //   status: {twoFactor: boolean};
+   * // }
+   */
   public async getMe(): Promise<GetMeReturn> {
     return await fetch(this.client.BASE_URL + '/user/me', {
       method: 'GET',
