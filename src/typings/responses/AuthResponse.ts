@@ -27,3 +27,23 @@ export type AuthResponse = {
       result: {};
     }
 );
+
+export type MeResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.OK;
+      result: {
+        userId: string;
+        emailAddress: string;
+        credits: number;
+        verified: boolean;
+        status: {
+          twoFactor: boolean;
+        };
+      };
+    }
+);

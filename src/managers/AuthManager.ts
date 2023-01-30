@@ -1,7 +1,12 @@
 import {BaseManager} from './BaseManager';
 import {Client} from '../lib';
 import fetch from 'cross-fetch';
-import {AuthResponse, ResponseStatus} from '../typings';
+import {
+  AuthResponse,
+  GetMeReturn,
+  MeResponse,
+  ResponseStatus,
+} from '../typings';
 
 /**
  * Manages API methods for authentication.
@@ -55,6 +60,28 @@ export class AuthManager extends BaseManager {
         }
 
         return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async getMe(): Promise<GetMeReturn> {
+    return await fetch(this.client.BASE_URL + '/user/me', {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+      },
+    })
+      .then(res => res.json() as Promise<MeResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.OK) {
+          return value.result;
+        }
+
+        throw new Error('An unexpected error has occurred');
       })
       .catch(error => {
         throw error;
