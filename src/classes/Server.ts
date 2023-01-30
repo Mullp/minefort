@@ -3,6 +3,7 @@ import {Client} from '../lib';
 import {
   Player,
   ResponseStatus,
+  ServerConsoleResponse,
   ServerDeleteResponse,
   ServerKillResponse,
   ServerNameChangeResponse,
@@ -383,6 +384,40 @@ export class Server extends BaseClass {
         }
 
         return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Gets the server's console output.
+   * @returns {Promise<string[]>} - A promise that resolves to a list of strings representing each line of the console's output.
+   * @throws {Error} - Will throw an error if not authenticated, or if the server is in an invalid state.
+   * @example
+   * const consoleLines = await server.getConsole()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  public async getConsole(): Promise<string[]> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/console`, {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+      },
+    })
+      .then(res => res.json() as Promise<ServerConsoleResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result.split('\n');
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        }
+
+        return [];
       })
       .catch(error => {
         throw error;

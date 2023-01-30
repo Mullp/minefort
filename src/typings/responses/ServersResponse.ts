@@ -205,3 +205,18 @@ export type ServerNameChangeResponse = {
       };
     }
 );
+
+export type ServerConsoleResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: string;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+);
