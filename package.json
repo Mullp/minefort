@@ -6,7 +6,7 @@
     "url": "https://github.com/Mullp"
   },
   "version": "1.0.0",
-  "description": "",
+  "description": "A powerful library for interacting with the Minefort API",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
