@@ -1,5 +1,10 @@
 {
   "name": "minefort",
+  "author": {
+    "email": "mullp@protonmail.com",
+    "name": "Mullp",
+    "url": "https://github.com/Mullp"
+  },
   "version": "0.0.0",
   "description": "",
   "main": "build/src/index.js",
