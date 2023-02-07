@@ -8,7 +8,8 @@ import {
   ServerKillResponse,
   ServerNameChangeResponse,
   ServerResponse,
-  ServerStartResponse, ServerState,
+  ServerStartResponse,
+  ServerState,
   ServerStopResponse,
   ServerWakeupResponse,
 } from '../typings';
