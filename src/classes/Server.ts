@@ -8,7 +8,7 @@ import {
   ServerKillResponse,
   ServerNameChangeResponse,
   ServerResponse,
-  ServerStartResponse,
+  ServerStartResponse, ServerState,
   ServerStopResponse,
   ServerWakeupResponse,
 } from '../typings';
@@ -43,7 +43,7 @@ export class Server extends BaseClass {
   /**
    * The state of the server.
    */
-  public readonly state: number;
+  public readonly state: ServerState;
   /**
    * Information about the server's subscription.
    */
