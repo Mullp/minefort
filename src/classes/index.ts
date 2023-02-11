@@ -1,3 +1,3 @@
 export * from './Base';
-export * from './Server';
+export * from './MyServer';
 export * from './Icon';

@@ -7,4 +7,19 @@ export enum ResponseStatus {
   INVALID_INPUT = 'INVALID_INPUT',
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
   SERVER_NAME_ALREADY_IN_USE = 'SERVER_NAME_ALREADY_IN_USE',
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
 }
+
+export type MinefortApiError = {
+  body: {
+    message: string;
+    path: string[];
+    type: string;
+    context: {
+      limit: string | number;
+      value: string | number;
+      label: string;
+      key: string;
+    };
+  }[];
+};

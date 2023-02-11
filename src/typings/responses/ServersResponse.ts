@@ -1,5 +1,5 @@
-import {ResponseStatus} from './ResponseStatus';
-import {BaseIcon} from './Icon';
+import {MinefortApiError, ResponseStatus} from './ResponseStatus';
+import {BaseIcon, IconResponse} from './IconResponse';
 
 export enum ServerState {
   SLEEPING = 0,
@@ -13,6 +13,41 @@ export enum ServerState {
 }
 
 export type ServerResponse = {
+  serverId: string;
+  serverName: string;
+  serverIcon: BaseIcon | IconResponse;
+  userId: string;
+  version: string;
+  state: ServerState;
+  messageOfTheDay: string;
+  players: {
+    online: number;
+    list: Omit<Player, 'name'>[];
+    max: number;
+  };
+};
+
+export type ServersResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: ServerResponse[];
+      pagination: {
+        more: boolean;
+        total: number;
+      };
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+);
+
+export type MyServerResponse = {
   serverId: string;
   serverName: string;
   serverIcon: BaseIcon;
@@ -34,12 +69,12 @@ export type ServerResponse = {
   }[];
 };
 
-export type ServersResponse = {
+export type MyServersResponse = {
   time: number;
 } & (
   | {
       status: ResponseStatus.OK;
-      result: ServerResponse[];
+      result: MyServerResponse[];
     }
   | {
       status: ResponseStatus.NOT_AUTHENTICATED;
@@ -123,19 +158,7 @@ export type ServerDeleteResponse = {
     }
   | {
       status: ResponseStatus.INVALID_INPUT;
-      error: {
-        body: {
-          message: string;
-          path: string[];
-          type: string;
-          context: {
-            limit: number;
-            value: string;
-            label: string;
-            key: string;
-          };
-        }[];
-      };
+      error: MinefortApiError;
     }
   | {
       status: ResponseStatus.INVALID_CREDENTIALS;
@@ -157,19 +180,7 @@ export type ServerNameAvailableResponse = {
     }
   | {
       status: ResponseStatus.INVALID_INPUT;
-      error: {
-        body: {
-          message: string;
-          path: string[];
-          type: string;
-          context: {
-            limit: number;
-            value: string;
-            label: string;
-            key: string;
-          };
-        }[];
-      };
+      error: MinefortApiError;
     }
 );
 
@@ -191,18 +202,7 @@ export type ServerNameChangeResponse = {
     }
   | {
       status: ResponseStatus.INVALID_INPUT;
-      error: {
-        body: {
-          message: string;
-          path: string[];
-          type: string;
-          context: {
-            value: string;
-            label: string;
-            key: string;
-          };
-        }[];
-      };
+      error: MinefortApiError;
     }
 );
 

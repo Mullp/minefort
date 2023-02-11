@@ -6,7 +6,7 @@ import {
   ServerNameAvailableResponse,
   ServersResponse,
 } from '../typings';
-import {Server} from '../classes';
+import {Server} from '../classes/Server';
 
 /**
  * Manages API methods for servers.
@@ -15,55 +15,6 @@ import {Server} from '../classes';
 export class ServerManager extends BaseManager {
   public constructor(client: Client) {
     super(client);
-  }
-
-  /**
-   * Gets all the servers associated with the user.
-   * @return {Promise<Server[]>} - A promise that resolves to the server list of servers associated with the user.
-   * @throws {Error} - Will throw an error if the user is not authenticated.
-   * @example
-   * // Get the user's servers.
-   * const serverManager = client.serverManager;
-   * const servers = await serverManager.getAll();
-   */
-  public async getAll(): Promise<Server[]> {
-    return await fetch(this.client.BASE_URL + '/user/servers', {
-      method: 'GET',
-      headers: {
-        Cookie: this.client.cookie,
-      },
-    })
-      .then(res => res.json() as Promise<ServersResponse>)
-      .then(value => {
-        if (value.status === ResponseStatus.OK) {
-          return value.result.map(server => new Server(this.client, server));
-        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
-          throw new Error('Not authenticated');
-        }
-
-        return [] as Server[];
-      })
-      .catch(error => {
-        throw error;
-      });
-  }
-
-  /**
-   * Retrieve a server instance by its id.
-   * @param {string} serverId - The id of the server.
-   * @returns {Promise<Server | void>} - A {@link Server} instance.
-   * @throws {Error} - Will throw an error if the user is not authenticated.
-   * @example
-   * // Get the user's server by id.
-   * const serverManager = client.serverManager;
-   * const server = await serverManager.get('serverId');
-   */
-  public async get(serverId: string): Promise<Server | void> {
-    return await this.getAll()
-      .then(servers => servers.find(server => server.id === serverId))
-      .catch(error => {
-        throw error;
-      });
   }
 
   /**
@@ -98,6 +49,49 @@ export class ServerManager extends BaseManager {
         }
 
         return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Gets all online servers.
+   * @return {Promise<Server[]>} - A promise that resolves to all the online servers.
+   * @throws {Error} - Will throw an error if the input is invalid or an internal server error had happened.
+   * @example
+   * // Get the user's servers.
+   * const serverManager = client.serverManager;
+   * const servers = await serverManager.getAll();
+   */
+  public async getAll(): Promise<Server[]> {
+    return await fetch(this.client.BASE_URL + '/list', {
+      method: 'POST',
+      body: JSON.stringify({
+        pagination: {
+          skip: 0,
+          limit: 500,
+        },
+        sort: {
+          field: 'players.online',
+          order: 'desc',
+        },
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServersResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result.map(server => new Server(this.client, server));
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal server error');
+        }
+
+        return [];
       })
       .catch(error => {
         throw error;
