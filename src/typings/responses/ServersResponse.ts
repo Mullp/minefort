@@ -54,6 +54,14 @@ export type MyServerResponse = {
   userId: string;
   version: string;
   state: ServerState;
+  usage: {
+    ram: number;
+    disk: number;
+  };
+  backups: {
+    backupId: string;
+    date: string;
+  }[];
   subscription: {
     currentPackageId: number;
     nextPackageId?: number;
@@ -63,10 +71,6 @@ export type MyServerResponse = {
   messageOfTheDay: string;
   players: {online: number; list: Player[]; max: number};
   ftp: {password: string};
-  backups: {
-    backupId: string;
-    date: string;
-  }[];
 };
 
 export type MyServersResponse = {

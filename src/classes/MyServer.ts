@@ -46,6 +46,32 @@ export class MyServer extends BaseClass {
    */
   public readonly state: ServerState;
   /**
+   * Information about the server's usage.
+   */
+  public readonly usage: {
+    /**
+     * The server's ram usage in megabytes
+     */
+    ramUsage: number;
+    /**
+     * The server's disk usage in megabytes
+     */
+    diskUsage: number;
+  };
+  /**
+   * The backups of the server.
+   */
+  public readonly backups?: {
+    /**
+     * The id of the backup.
+     */
+    backupId: string;
+    /**
+     * The date at which the backup was taken.
+     */
+    createdAt: Date;
+  }[];
+  /**
    * Information about the server's subscription.
    */
   public readonly subscription: {
@@ -112,19 +138,6 @@ export class MyServer extends BaseClass {
      */
     password: string;
   };
-  /**
-   * The backups of the server.
-   */
-  public readonly backups?: {
-    /**
-     * The id of the backup.
-     */
-    backupId: string;
-    /**
-     * The date at which the backup was taken.
-     */
-    createdAt: Date;
-  }[];
 
   public constructor(client: Client, data: MyServerResponse) {
     super(client);
@@ -135,6 +148,16 @@ export class MyServer extends BaseClass {
     this.userId = data.userId;
     this.version = data.version;
     this.state = data.state;
+    this.usage = {
+      diskUsage: data.usage.disk,
+      ramUsage: data.usage.ram,
+    };
+    this.backups = data.backups?.map(backup => {
+      return {
+        backupId: backup.backupId,
+        createdAt: new Date(backup.date),
+      };
+    });
     this.subscription = {
       currentPackageId: data.subscription.currentPackageId,
       nextPackageId: data.subscription.nextPackageId,
@@ -151,12 +174,6 @@ export class MyServer extends BaseClass {
       maxPlayers: data.players.max,
     };
     this.ftp = {password: data.ftp.password};
-    this.backups = data.backups?.map(backup => {
-      return {
-        backupId: backup.backupId,
-        createdAt: new Date(backup.date),
-      };
-    });
   }
 
   /**
