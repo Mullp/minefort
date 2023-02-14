@@ -16,7 +16,8 @@ export type MinefortApiError = {
     path: string[];
     type: string;
     context: {
-      limit: string | number;
+      limit?: string | number;
+      valids?: string[];
       value: string | number;
       label: string;
       key: string;

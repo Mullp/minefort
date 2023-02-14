@@ -13,9 +13,11 @@ import {
   ServerStopResponse,
   ServerWakeupResponse,
   ServerMotdChangeResponse,
+  ServerPropertyChangeResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
+import {ServerProperties} from '../typings/ServerTypings';
 
 /**
  * Represents a server of a user.
@@ -350,7 +352,7 @@ export class MyServer extends BaseClass {
         } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_INPUT) {
-          throw new Error('Invalid input: ' + value.error.body[0].message);
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
         } else if (value.status === ResponseStatus.INVALID_CREDENTIALS) {
           throw new Error('Invalid credentials');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
@@ -397,7 +399,7 @@ export class MyServer extends BaseClass {
         } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_INPUT) {
-          throw new Error('Invalid input: ' + value.error.body[0].message);
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be in hibernation');
         }
@@ -466,6 +468,52 @@ export class MyServer extends BaseClass {
       },
     })
       .then(res => res.json() as Promise<ServerMotdChangeResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Sets a property of the server.
+   * @param {string} property - The property.
+   * @param {string} value - The new value.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server's property was successfully changed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @example
+   * const success = await server.setProperty('pvp', false)
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  public async setProperty(
+    property: ServerProperties,
+    value: string | number | boolean
+  ): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/properties`, {
+      method: 'POST',
+      body: JSON.stringify({
+        property: property,
+        value: value,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerPropertyChangeResponse>)
       .then(value => {
         if (value.status === ResponseStatus.OK) {
           return true;
