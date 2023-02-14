@@ -210,6 +210,25 @@ export type ServerNameChangeResponse = {
     }
 );
 
+export type ServerMotdChangeResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error?: MinefortApiError;
+    }
+);
+
 export type ServerConsoleResponse = {
   time: number;
 } & (

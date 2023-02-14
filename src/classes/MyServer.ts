@@ -12,6 +12,7 @@ import {
   ServerState,
   ServerStopResponse,
   ServerWakeupResponse,
+  ServerMotdChangeResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
@@ -436,6 +437,47 @@ export class MyServer extends BaseClass {
         }
 
         return [];
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Sets the motd of the server.
+   * @param {string} motd - The new motd of the server.
+   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server's motd was successfully changed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @example
+   * const success = await server.setMotd('new server motd')
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  public async setMotd(motd: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/motd`, {
+      method: 'POST',
+      body: JSON.stringify({
+        messageOfTheDay: motd,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerMotdChangeResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        }
+
+        return false;
       })
       .catch(error => {
         throw error;
