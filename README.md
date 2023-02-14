@@ -1,7 +1,7 @@
 <div align="center">
 	<br />
 	<p>
-		<a href="https://github.com/Mullp/minefort"><img src="https://cdn.minefort.com/img/logo-white.svg" width="546" alt="discord.js" /></a>
+		<a href="https://minefort.com/?r=fn6x52xtos"><img src="https://cdn.minefort.com/img/logo-white.svg" width="546" alt="discord.js" /></a>
 	</p>
 	<br />
 	<p>
@@ -16,6 +16,7 @@
 <!-- TOC -->
   * [Table of Contents](#table-of-contents)
   * [Notice of Non-Affiliation and Disclaimer](#notice-of-non-affiliation-and-disclaimer)
+  * [Affiliate link](#affiliate-link)
   * [Installation](#installation)
   * [Loading the module](#loading-the-module)
     * [ES Modules (ESM)](#es-modules--esm-)
@@ -28,6 +29,9 @@
 
 ## Notice of Non-Affiliation and Disclaimer
 We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with Minefort.com, or any of its subsidiaries or its affiliates. The official Minefort.com website can be found at https://minefort.com/.
+
+## Affiliate link
+You can support this open source project by using the following [affiliate link](https://minefort.com/?r=fn6x52xtos).
 
 ## Installation
 
