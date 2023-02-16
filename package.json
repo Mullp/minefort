@@ -5,7 +5,7 @@
     "name": "Mullp",
     "url": "https://github.com/Mullp"
   },
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A powerful library for interacting with the Minefort API",
   "repository": {
     "type": "git",
