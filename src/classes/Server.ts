@@ -1,6 +1,6 @@
 import {BaseClass} from './Base';
 import {Client} from '../lib';
-import {Player, ServerState, ServerResponse} from '../typings';
+import {ServerState, ServerResponse} from '../typings';
 import {Icon} from './Icon';
 
 /**
@@ -45,7 +45,7 @@ export class Server extends BaseClass {
      */
     playerCount: number;
     /**
-     * A list of {@link Player} representing all online players.
+     * A list of uuids representing all online players.
      */
     online?: string[];
     /**
