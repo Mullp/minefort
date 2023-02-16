@@ -1,5 +1,8 @@
 import {AuthManager, ServerManager} from '../../managers';
 
+/**
+ * Represents the client.
+ */
 export class Client {
   /**
    * The base url for the Minefort api.

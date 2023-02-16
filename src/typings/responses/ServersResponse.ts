@@ -1,5 +1,5 @@
 import {MinefortApiError, ResponseStatus} from './ResponseStatus';
-import {BaseIcon, IconResponse} from './IconResponse';
+import {IconResponse} from './IconResponse';
 
 export enum ServerState {
   SLEEPING = 0,
@@ -15,14 +15,14 @@ export enum ServerState {
 export type ServerResponse = {
   serverId: string;
   serverName: string;
-  serverIcon: BaseIcon | IconResponse;
+  serverIcon: IconResponse;
   userId: string;
   version: string;
   state: ServerState;
   messageOfTheDay: string;
   players: {
     online: number;
-    list: Omit<Player, 'name'>[];
+    list?: Omit<Player, 'name'>[];
     max: number;
   };
 };
@@ -50,7 +50,7 @@ export type ServersResponse = {
 export type MyServerResponse = {
   serverId: string;
   serverName: string;
-  serverIcon: BaseIcon;
+  serverIcon: IconResponse;
   userId: string;
   version: string;
   state: ServerState;
@@ -66,7 +66,7 @@ export type MyServerResponse = {
     currentPackageId: number;
     nextPackageId?: number;
   };
-  unlockedIcons: BaseIcon[];
+  unlockedIcons: IconResponse[];
   settings: {lobbyVisible: boolean; startupCommand: number};
   messageOfTheDay: string;
   players: {online: number; list: Player[]; max: number};

@@ -181,7 +181,7 @@ export class MyServer extends BaseClass {
 
   /**
    * Wakes up the server.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully woken up or not.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully woken up or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is already running.
    * @example
    * const success = await server.wakeup()
@@ -216,7 +216,7 @@ export class MyServer extends BaseClass {
 
   /**
    * Starts up the server.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully started up or not.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully started up or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
    * @example
    * const success = await server.start()
@@ -253,7 +253,7 @@ export class MyServer extends BaseClass {
 
   /**
    * Stops the server.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully stopped or not.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully stopped or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
    * @example
    * const success = await server.stop()
@@ -290,7 +290,7 @@ export class MyServer extends BaseClass {
 
   /**
    * Forces the server into stopping.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully forced into stopping or not.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully forced into stopping or not.
    * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
    * @example
    * const success = await server.kill()
@@ -325,8 +325,8 @@ export class MyServer extends BaseClass {
 
   /**
    * Deletes the server.
-   * @param {string} password - The user's password of the server's owner.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
+   * @param password - The user's password of the server owner.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
    * @throws {Error} - Will throw an error if the user is not authenticated, invalid input is given, invalid credentials, or invalid server state.
    * @example
    * const success = await server.delete('password')
@@ -367,9 +367,84 @@ export class MyServer extends BaseClass {
   }
 
   /**
+   * Gets the server's console output.
+   * @returns A promise that resolves to a list of strings representing each line of the console's output.
+   * @throws {Error} - Will throw an error if not authenticated, or if the server is in an invalid state.
+   * @example
+   * const consoleLines = await server.getConsole()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  public async getConsole(): Promise<string[]> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/console`, {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+      },
+    })
+      .then(res => res.json() as Promise<ServerConsoleResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result.split('\n');
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        }
+
+        return [];
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Sets the motd of the server.
+   * @param motd - The new motd of the server.
+   * @returns A promise that resolves to a boolean value indicating whether the server's motd was successfully changed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @example
+   * const success = await server.setMotd('new server motd')
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  public async setMotd(motd: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/motd`, {
+      method: 'POST',
+      body: JSON.stringify({
+        messageOfTheDay: motd,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerMotdChangeResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
    * Sets the name of the server.
-   * @param {string} serverName - The new name of the server.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server was successfully renamed or not.
+   * @param serverName - The new name of the server.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully renamed or not.
    * @throws {Error} - Will throw an error if the server name is already in use by another Minefort server, if not authenticated, if invalid input, or if the server is in an invalid state.
    * @example
    * const success = await server.setName('new server name')
@@ -412,85 +487,10 @@ export class MyServer extends BaseClass {
   }
 
   /**
-   * Gets the server's console output.
-   * @returns {Promise<string[]>} - A promise that resolves to a list of strings representing each line of the console's output.
-   * @throws {Error} - Will throw an error if not authenticated, or if the server is in an invalid state.
-   * @example
-   * const consoleLines = await server.getConsole()
-   *   .catch(error => {
-   *     console.error(error);
-   *   });
-   */
-  public async getConsole(): Promise<string[]> {
-    return await fetch(this.client.BASE_URL + `/server/${this.id}/console`, {
-      method: 'GET',
-      headers: {
-        Cookie: this.client.cookie,
-      },
-    })
-      .then(res => res.json() as Promise<ServerConsoleResponse>)
-      .then(value => {
-        if (value.status === ResponseStatus.OK) {
-          return value.result.split('\n');
-        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
-          throw new Error('Not authenticated');
-        } else if (value.status === ResponseStatus.INVALID_STATE) {
-          throw new Error('Invalid state. Server may be in hibernation');
-        }
-
-        return [];
-      })
-      .catch(error => {
-        throw error;
-      });
-  }
-
-  /**
-   * Sets the motd of the server.
-   * @param {string} motd - The new motd of the server.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server's motd was successfully changed or not.
-   * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
-   * @example
-   * const success = await server.setMotd('new server motd')
-   *   .catch(error => {
-   *     console.error(error);
-   *   });
-   */
-  public async setMotd(motd: string): Promise<boolean> {
-    return await fetch(this.client.BASE_URL + `/server/${this.id}/motd`, {
-      method: 'POST',
-      body: JSON.stringify({
-        messageOfTheDay: motd,
-      }),
-      headers: {
-        Cookie: this.client.cookie,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => res.json() as Promise<ServerMotdChangeResponse>)
-      .then(value => {
-        if (value.status === ResponseStatus.OK) {
-          return true;
-        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
-          throw new Error('Not authenticated');
-        } else if (value.status === ResponseStatus.INVALID_INPUT) {
-          throw new Error('Invalid input: ' + value.error?.body[0].message);
-        } else if (value.status === ResponseStatus.INVALID_STATE) {
-          throw new Error('Invalid state. Server may be in hibernation');
-        }
-
-        return false;
-      })
-      .catch(error => {
-        throw error;
-      });
-  }
-
-  /**
    * Sets a property of the server.
-   * @param {string} property - The property.
-   * @param {string} value - The new value.
-   * @returns {Promise<boolean>} - A promise that resolves to a boolean value indicating whether the server's property was successfully changed or not.
+   * @param property - The property.
+   * @param value - The new value.
+   * @returns A promise that resolves to a boolean value indicating whether the server's property was successfully changed or not.
    * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
    * @example
    * const success = await server.setProperty('pvp', false)

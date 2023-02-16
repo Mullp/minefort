@@ -10,7 +10,7 @@ export abstract class BaseManager {
    */
   public readonly client!: Client;
 
-  public constructor(client: Client) {
+  protected constructor(client: Client) {
     Object.defineProperty(this, 'client', {value: client, enumerable: false});
   }
 }

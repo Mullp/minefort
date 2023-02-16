@@ -1,6 +1,6 @@
 import {BaseClass} from './Base';
 import {Client} from '../lib';
-import {BaseIcon, IconResponse} from '../typings';
+import {IconResponse} from '../typings';
 
 /**
  * Represents a server {@link Icon}
@@ -28,7 +28,7 @@ export class Icon extends BaseClass {
    */
   public readonly credits?: number;
 
-  public constructor(client: Client, data: BaseIcon & Partial<IconResponse>) {
+  public constructor(client: Client, data: IconResponse) {
     super(client);
 
     this.id = data.iconId;

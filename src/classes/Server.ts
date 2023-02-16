@@ -47,7 +47,7 @@ export class Server extends BaseClass {
     /**
      * A list of {@link Player} representing all online players.
      */
-    online: Omit<Player, 'name'>[];
+    online?: string[];
     /**
      * The max amount of players allowed online at once.
      */
@@ -66,7 +66,7 @@ export class Server extends BaseClass {
     this.motd = data.messageOfTheDay;
     this.playerData = {
       playerCount: data.players.online,
-      online: data.players.list,
+      online: data.players.list?.map(player => player.uuid),
       maxPlayers: data.players.max,
     };
   }
