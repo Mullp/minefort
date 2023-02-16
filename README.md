@@ -73,7 +73,7 @@ const client = new Client();
 (async () => {
   await client.authManager.authenticate("username", "password");
 
-  const servers = await client.authManager.getAll();
+  const servers = await client.serverManager.getMyServers();
   console.log(servers);
 })();
 ```
