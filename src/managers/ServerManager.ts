@@ -59,6 +59,7 @@ export class ServerManager extends BaseManager {
 
   /**
    * Gets all online servers.
+   * @param options - Options to the method.
    * @return A promise that resolves to all the online servers.
    * @throws {Error} - Will throw an error if the input is invalid or an internal server error had happened.
    * @example
@@ -66,17 +67,23 @@ export class ServerManager extends BaseManager {
    * const serverManager = client.serverManager;
    * const servers = await serverManager.getOnlineServers();
    */
-  public async getOnlineServers(): Promise<Server[]> {
+  public async getOnlineServers(
+    options: {
+      paginationSkip?: number;
+      limit?: number;
+      sortOrder?: 'desc' | 'asc';
+    } = {paginationSkip: 0, limit: 500, sortOrder: 'desc'}
+  ): Promise<Server[]> {
     return await fetch(this.client.BASE_URL + '/list', {
       method: 'POST',
       body: JSON.stringify({
         pagination: {
-          skip: 0,
-          limit: 500,
+          skip: options.paginationSkip,
+          limit: options.limit,
         },
         sort: {
           field: 'players.online',
-          order: 'desc',
+          order: options.sortOrder,
         },
       }),
       headers: {
