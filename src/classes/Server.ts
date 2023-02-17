@@ -45,7 +45,7 @@ export class Server extends BaseClass {
      */
     playerCount: number;
     /**
-     * A list of uuids representing all online players.
+     * A list of UUIDs representing all online players.
      */
     online?: string[];
     /**
