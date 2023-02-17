@@ -101,6 +101,9 @@ export type ServerWakeupResponse = {
       status: ResponseStatus.NOT_AUTHENTICATED;
     }
   | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
       status: ResponseStatus.INVALID_STATE;
     }
 );
@@ -118,6 +121,9 @@ export type ServerStartResponse = {
   | {
       status: ResponseStatus.INVALID_STATE;
     }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
 );
 
 export type ServerStopResponse = {
@@ -133,6 +139,9 @@ export type ServerStopResponse = {
   | {
       status: ResponseStatus.INVALID_STATE;
     }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
 );
 
 export type ServerKillResponse = {
@@ -147,6 +156,9 @@ export type ServerKillResponse = {
     }
   | {
       status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
     }
 );
 
@@ -208,6 +220,9 @@ export type ServerNameChangeResponse = {
       status: ResponseStatus.INVALID_INPUT;
       error: MinefortApiError;
     }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
 );
 
 export type ServerMotdChangeResponse = {
@@ -226,6 +241,9 @@ export type ServerMotdChangeResponse = {
   | {
       status: ResponseStatus.INVALID_INPUT;
       error?: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
     }
 );
 
@@ -249,6 +267,9 @@ export type ServerPropertyChangeResponse = {
       status: ResponseStatus.INVALID_INPUT;
       error: MinefortApiError;
     }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
 );
 
 export type ServerConsoleResponse = {
@@ -263,5 +284,28 @@ export type ServerConsoleResponse = {
     }
   | {
       status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+);
+
+export type ServerPropertiesResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {
+        [key: string]: string | number | boolean | null;
+      };
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
     }
 );

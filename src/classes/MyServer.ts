@@ -15,6 +15,7 @@ import {
   ServerMotdChangeResponse,
   ServerPropertyChangeResponse,
   ServerProperties,
+  ServerPropertiesResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
@@ -182,7 +183,7 @@ export class MyServer extends BaseClass {
   /**
    * Wakes up the server.
    * @returns A promise that resolves to a boolean value indicating whether the server was successfully woken up or not.
-   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is already running.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.wakeup()
    *   .catch(error => {
@@ -205,6 +206,8 @@ export class MyServer extends BaseClass {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may already be running');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;
@@ -217,7 +220,7 @@ export class MyServer extends BaseClass {
   /**
    * Starts up the server.
    * @returns A promise that resolves to a boolean value indicating whether the server was successfully started up or not.
-   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.start()
    *   .catch(error => {
@@ -242,6 +245,8 @@ export class MyServer extends BaseClass {
           throw new Error(
             'Invalid state. Server may already be running or asleep'
           );
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;
@@ -254,7 +259,7 @@ export class MyServer extends BaseClass {
   /**
    * Stops the server.
    * @returns A promise that resolves to a boolean value indicating whether the server was successfully stopped or not.
-   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.stop()
    *   .catch(error => {
@@ -279,6 +284,8 @@ export class MyServer extends BaseClass {
           throw new Error(
             'Invalid state. Server may already be stopped or asleep'
           );
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;
@@ -291,7 +298,7 @@ export class MyServer extends BaseClass {
   /**
    * Forces the server into stopping.
    * @returns A promise that resolves to a boolean value indicating whether the server was successfully forced into stopping or not.
-   * @throws {Error} - Will throw an error if the user is not authenticated or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.kill()
    *   .catch(error => {
@@ -314,6 +321,8 @@ export class MyServer extends BaseClass {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;
@@ -369,7 +378,7 @@ export class MyServer extends BaseClass {
   /**
    * Gets the server's console output.
    * @returns A promise that resolves to a list of strings representing each line of the console's output.
-   * @throws {Error} - Will throw an error if not authenticated, or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if not authenticated, if the server is in an invalid state, or if the server is not found.
    * @example
    * const consoleLines = await server.getConsole()
    *   .catch(error => {
@@ -391,6 +400,8 @@ export class MyServer extends BaseClass {
           throw new Error('Not authenticated');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return [];
@@ -401,10 +412,47 @@ export class MyServer extends BaseClass {
   }
 
   /**
+   * Gets the server's properties.
+   * @returns A promise that resolves to a map of strings representing the server's properties.
+   * @throws {Error} - Will throw an error if not authenticated, if the server is not found, or if the server is in an invalid state.
+   * @example
+   * // Example of getting the server's difficulty.
+   * const properties = await server.getProperties();
+   * console.log("Server's difficulty is: " + properties.get("difficulty"));
+   */
+  public async getProperties(): Promise<
+    Map<string, string | number | boolean | null>
+  > {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/properties`, {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+      },
+    })
+      .then(res => res.json() as Promise<ServerPropertiesResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return new Map(Object.entries(value.result));
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
+        }
+
+        return new Map();
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
    * Sets the motd of the server.
    * @param motd - The new motd of the server.
    * @returns A promise that resolves to a boolean value indicating whether the server's motd was successfully changed or not.
-   * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.setMotd('new server motd')
    *   .catch(error => {
@@ -432,6 +480,8 @@ export class MyServer extends BaseClass {
           throw new Error('Invalid input: ' + value.error?.body[0].message);
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;
@@ -445,7 +495,7 @@ export class MyServer extends BaseClass {
    * Sets the name of the server.
    * @param serverName - The new name of the server.
    * @returns A promise that resolves to a boolean value indicating whether the server was successfully renamed or not.
-   * @throws {Error} - Will throw an error if the server name is already in use by another Minefort server, if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if the server name is already in use by another Minefort server, if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.setName('new server name')
    *   .catch(error => {
@@ -477,6 +527,8 @@ export class MyServer extends BaseClass {
           throw new Error('Invalid input: ' + value.error?.body[0].message);
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;
@@ -491,7 +543,7 @@ export class MyServer extends BaseClass {
    * @param property - The property.
    * @param value - The new value.
    * @returns A promise that resolves to a boolean value indicating whether the server's property was successfully changed or not.
-   * @throws {Error} - Will throw an error if not authenticated, if invalid input, or if the server is in an invalid state.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
    * @example
    * const success = await server.setProperty('pvp', false)
    *   .catch(error => {
@@ -523,6 +575,8 @@ export class MyServer extends BaseClass {
           throw new Error('Invalid input: ' + value.error?.body[0].message);
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         }
 
         return false;

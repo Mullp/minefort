@@ -2,7 +2,7 @@ import {BaseManager} from './BaseManager';
 import {Client} from '../client';
 import fetch from 'cross-fetch';
 import {IconsResponse, ResponseStatus} from '../typings';
-import {Icon, Server} from '../classes';
+import {Icon} from '../classes';
 
 /**
  * Manages API methods for icons.
