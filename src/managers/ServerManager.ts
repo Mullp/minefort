@@ -1,5 +1,5 @@
 import {BaseManager} from './BaseManager';
-import {Client} from '../lib';
+import {Client} from '../client';
 import fetch from 'cross-fetch';
 import {
   MyServersResponse,
@@ -7,8 +7,7 @@ import {
   ServerNameAvailableResponse,
   ServersResponse,
 } from '../typings';
-import {Server} from '../classes/Server';
-import {MyServer} from '../classes';
+import {MyServer, Server} from '../classes';
 
 /**
  * Manages API methods for servers.

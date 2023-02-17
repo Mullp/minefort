@@ -1,5 +1,5 @@
 import {BaseClass} from './Base';
-import {Client} from '../lib';
+import {Client} from '../client';
 import {IconResponse} from '../typings';
 
 /**

@@ -22,7 +22,7 @@ export type ServerResponse = {
   messageOfTheDay: string;
   players: {
     online: number;
-    list?: Omit<Player, 'name'>[];
+    list?: Pick<Player, 'uuid'>[];
     max: number;
   };
 };

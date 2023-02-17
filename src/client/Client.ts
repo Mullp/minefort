@@ -1,4 +1,4 @@
-import {AuthManager, ServerManager} from '../../managers';
+import {AuthManager, ServerManager} from '../managers';
 
 /**
  * Represents the client.

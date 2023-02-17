@@ -1,4 +1,4 @@
-import {Client} from '../lib';
+import {Client} from '../client';
 
 /**
  * Represents an abstract class that provides a base constructor for derived classes to use.

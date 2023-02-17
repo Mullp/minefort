@@ -1,5 +1,5 @@
 import {BaseClass} from './Base';
-import {Client} from '../lib';
+import {Client} from '../client';
 import {
   Player,
   ResponseStatus,
@@ -14,10 +14,10 @@ import {
   ServerWakeupResponse,
   ServerMotdChangeResponse,
   ServerPropertyChangeResponse,
+  ServerProperties,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
-import {ServerProperties} from '../typings/ServerTypings';
 
 /**
  * Represents a server of a user.

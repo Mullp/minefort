@@ -1,5 +1,5 @@
 import {BaseManager} from './BaseManager';
-import {Client} from '../lib';
+import {Client} from '../client';
 import fetch from 'cross-fetch';
 import {
   AuthResponse,
