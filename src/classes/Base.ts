@@ -9,6 +9,7 @@ export abstract class BaseClass {
    * The client that instantiated this.
    */
   public readonly client: Client;
+
   protected constructor(client: Client) {
     this.client = client;
   }

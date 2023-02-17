@@ -8,9 +8,9 @@ export abstract class BaseManager {
   /**
    * The client that instantiated this.
    */
-  public readonly client!: Client;
+  public readonly client: Client;
 
   protected constructor(client: Client) {
-    Object.defineProperty(this, 'client', {value: client, enumerable: false});
+    this.client = client;
   }
 }
