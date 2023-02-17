@@ -16,6 +16,7 @@ import {
   ServerPropertyChangeResponse,
   ServerProperties,
   ServerPropertiesResponse,
+  ServerSleepResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
@@ -333,6 +334,44 @@ export class MyServer extends BaseClass {
   }
 
   /**
+   * Puts the server into hibernation.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully put into hibernation or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
+   * @example
+   * // Puts the server into hibernation.
+   * const success = await server.sleep()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  public async sleep(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/sleep`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerSleepResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may already be asleep');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
    * Deletes the server.
    * @param password - The user's password of the server owner.
    * @returns A promise that resolves to a boolean value indicating whether the server was successfully deleted or not.
@@ -417,7 +456,11 @@ export class MyServer extends BaseClass {
    * @throws {Error} - Will throw an error if not authenticated, if the server is not found, or if the server is in an invalid state.
    * @example
    * // Example of getting the server's difficulty.
-   * const properties = await server.getProperties();
+   * const properties = await server.getProperties()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   *
    * console.log("Server's difficulty is: " + properties.get("difficulty"));
    */
   public async getProperties(): Promise<

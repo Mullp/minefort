@@ -162,6 +162,24 @@ export type ServerKillResponse = {
     }
 );
 
+export type ServerSleepResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+);
+
 export type ServerDeleteResponse = {
   time: number;
 } & (
