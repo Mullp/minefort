@@ -290,6 +290,27 @@ export type ServerPropertyChangeResponse = {
     }
 );
 
+export type ServerIconChangeResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.INSUFFICIENT_BALANCE;
+    }
+);
+
 export type ServerConsoleResponse = {
   time: number;
 } & (

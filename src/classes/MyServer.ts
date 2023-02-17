@@ -1,22 +1,23 @@
 import {BaseClass} from './Base';
 import {Client} from '../client';
 import {
+  MyServerResponse,
   Player,
   ResponseStatus,
   ServerConsoleResponse,
   ServerDeleteResponse,
+  ServerIconChangeResponse,
   ServerKillResponse,
+  ServerMotdChangeResponse,
   ServerNameChangeResponse,
-  MyServerResponse,
+  ServerProperties,
+  ServerPropertiesResponse,
+  ServerPropertyChangeResponse,
+  ServerSleepResponse,
   ServerStartResponse,
   ServerState,
   ServerStopResponse,
   ServerWakeupResponse,
-  ServerMotdChangeResponse,
-  ServerPropertyChangeResponse,
-  ServerProperties,
-  ServerPropertiesResponse,
-  ServerSleepResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
@@ -572,6 +573,55 @@ export class MyServer extends BaseClass {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Sets the icon of the server. **Note: If server doesn't own the icon, it will be purchased.**
+   * @param iconId - The ID of the icon to set.
+   * @returns A promise that resolves to a boolean value indicating whether the server's icon was successfully changed or purchased, or not.
+   * @throws {Error} - Will throw an error if not authenticated, if the server is in an invalid state, if the server or the icon is not found, or if the authenticated user does not have enough funds to purchase the icon.
+   * @example
+   * // Change the server's icon to the icon with the name 'Sweet Berries Icon'
+   * const icon = await client.iconManager
+   *   .getIcon('Sweet Berries Icon', { byName: true })
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   *
+   * if (!icon) throw new Error('Icon not found');
+   *
+   * const success = await server.setIcon(icon);
+   */
+  public async setIcon(iconId: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/icon`, {
+      method: 'POST',
+      body: JSON.stringify({
+        iconId: iconId,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerIconChangeResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server or icon is not found');
+        } else if (value.status === ResponseStatus.INSUFFICIENT_BALANCE) {
+          throw new Error('Insufficient balance');
         }
 
         return false;
