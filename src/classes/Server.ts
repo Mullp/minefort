@@ -9,7 +9,7 @@ import {Icon} from './Icon';
  */
 export class Server extends BaseClass {
   /**
-   * The server's id.
+   * The server's ID.
    */
   public readonly id: string;
   /**
@@ -21,9 +21,9 @@ export class Server extends BaseClass {
    */
   public readonly icon: Icon;
   /**
-   * The owner of the server's user id.
+   * The owner of the server's user ID.
    */
-  public readonly owner: string;
+  public readonly ownerId: string;
   /**
    * The version of the server.
    */
@@ -60,7 +60,7 @@ export class Server extends BaseClass {
     this.id = data.serverId;
     this.name = data.serverName;
     this.icon = new Icon(client, data.serverIcon);
-    this.owner = data.userId;
+    this.ownerId = data.userId;
     this.version = data.version;
     this.state = data.state;
     this.motd = data.messageOfTheDay;

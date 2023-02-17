@@ -25,7 +25,7 @@ import {Icon} from './Icon';
  */
 export class MyServer extends BaseClass {
   /**
-   * The server's id.
+   * The server's ID.
    */
   public readonly id: string;
   /**
@@ -37,7 +37,7 @@ export class MyServer extends BaseClass {
    */
   public readonly icon: Icon;
   /**
-   * The owner of the server's user id.
+   * The owner of the server's user ID.
    */
   public readonly userId: string;
   /**
@@ -66,7 +66,7 @@ export class MyServer extends BaseClass {
    */
   public readonly backups?: {
     /**
-     * The id of the backup.
+     * The ID of the backup.
      */
     backupId: string;
     /**
@@ -79,11 +79,11 @@ export class MyServer extends BaseClass {
    */
   public readonly subscription: {
     /**
-     * The package id of the current active subscription.
+     * The package ID of the current active subscription.
      */
     currentPackageId: number;
     /**
-     * The package id of the next package.
+     * The package ID of the next package.
      */
     nextPackageId?: number;
   };
@@ -132,7 +132,7 @@ export class MyServer extends BaseClass {
    * @example Connection information.
    * Host: ftp.minefort.com
    * Port: 21
-   * FTP Username: // The server's id
+   * FTP Username: // The server's ID
    * FTP Password: // Stored under this.ftp.password
    */
   public readonly ftp: {

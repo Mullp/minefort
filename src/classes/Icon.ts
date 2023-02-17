@@ -8,7 +8,7 @@ import {IconResponse} from '../typings';
  */
 export class Icon extends BaseClass {
   /**
-   * The id of the icon.
+   * The ID of the icon.
    */
   public readonly id: string;
   /**
