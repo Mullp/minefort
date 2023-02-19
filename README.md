@@ -1,7 +1,7 @@
 <div align="center">
 	<br />
 	<p>
-		<a href="https://minefort.com/?r=fn6x52xtos"><img src="https://cdn.minefort.com/img/logo-white.svg" width="546" alt="discord.js" /></a>
+		<a href="https://minefort.com/?r=fn6x52xtos"><img src="https://cdn.minefort.com/img/logo-white.svg" width="546" alt="Minefort" /></a>
 	</p>
 	<br />
 	<p>
