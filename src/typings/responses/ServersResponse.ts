@@ -348,3 +348,27 @@ export type ServerPropertiesResponse = {
       status: ResponseStatus.NOT_AUTHENTICATED;
     }
 );
+
+export type ServerCreateResponse = {
+  time: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {
+        serverId: string;
+      };
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.SERVER_NAME_ALREADY_IN_USE;
+    }
+  | {
+      status: ResponseStatus.SERVER_ACCOUNT_LIMIT;
+    }
+);

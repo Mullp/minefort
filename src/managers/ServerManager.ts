@@ -4,6 +4,7 @@ import fetch from 'cross-fetch';
 import {
   MyServersResponse,
   ResponseStatus,
+  ServerCreateResponse,
   ServerNameAvailableResponse,
   ServersResponse,
 } from '../typings';
@@ -189,6 +190,53 @@ export class ServerManager extends BaseManager {
         } else {
           return servers.find(server => server.id === serverIdOrName) ?? null;
         }
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  /**
+   * Creates a server.
+   * @param serverName - The name of the server.
+   * @param template - The template to use for the server, defaults to "default".
+   * @returns A promise that resolves to a boolean indicating whether the server was created or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the input is invalid, if the server name is already taken, or if the server could not be created.
+   * @example
+   * // Create a server.
+   * const serverManager = client.serverManager;
+   * const created = await serverManager.createServer('serverName');
+   */
+  public async createServer(
+    serverName: string,
+    template = 'default'
+  ): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + '/server/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        serverName: serverName,
+        template: template,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerCreateResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        } else if (value.status === ResponseStatus.SERVER_NAME_ALREADY_IN_USE) {
+          throw new Error('Server name already in use');
+        } else if (value.status === ResponseStatus.SERVER_ACCOUNT_LIMIT) {
+          throw new Error('Server limit reached');
+        }
+
+        return false;
       })
       .catch(error => {
         throw error;
