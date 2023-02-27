@@ -3,7 +3,7 @@ import {Client} from '../client';
 import {IconResponse} from '../typings';
 
 /**
- * Represents a server {@link Icon}
+ * Represents an {@link Icon}
  * @extends {BaseClass}
  */
 export class Icon extends BaseClass {

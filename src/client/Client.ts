@@ -1,4 +1,9 @@
-import {AuthManager, IconManager, ServerManager} from '../managers';
+import {
+  AuthManager,
+  IconManager,
+  NetworkManager,
+  ServerManager,
+} from '../managers';
 
 /**
  * Represents the client.
@@ -17,6 +22,7 @@ export class Client {
   public readonly authManager: AuthManager = new AuthManager(this);
   public readonly serverManager: ServerManager = new ServerManager(this);
   public readonly iconManager: IconManager = new IconManager(this);
+  public readonly networkManager: NetworkManager = new NetworkManager(this);
 
   /**
    * The session cookie with "minefort-session=" appended in front.

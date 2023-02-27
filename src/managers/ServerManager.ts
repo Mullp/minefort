@@ -112,7 +112,7 @@ export class ServerManager extends BaseManager {
    * @param serverIdOrName - The ID or name of the server.
    * @param options - Options to the method.
    * @param options.byName - Whether to get the server by its name or not.
-   * @returns A {@link Server} instance.
+   * @returns A {@link Server} instance or `null` if the server was not found.
    * @throws {Error} - Will throw an error if a problem occurred.
    * @example
    * // Get an online server by name.
@@ -172,7 +172,7 @@ export class ServerManager extends BaseManager {
    * @param serverIdOrName - The ID or name of the server.
    * @param options - Options to the method.
    * @param options.byName - Whether to get the server by its name or not.
-   * @returns A {@link MyServer} instance.
+   * @returns A {@link MyServer} instance or `null` if the server was not found.
    * @throws {Error} - Will throw an error if the user is not authenticated.
    * @example
    * // Get the user's server by name.
