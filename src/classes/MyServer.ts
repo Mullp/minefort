@@ -58,11 +58,11 @@ export class MyServer extends BaseClass {
     /**
      * The server's ram usage in megabytes
      */
-    ramUsage: number;
+    readonly ramUsage: number;
     /**
      * The server's disk usage in megabytes
      */
-    diskUsage: number;
+    readonly diskUsage: number;
   };
   /**
    * The backups of the server.
@@ -71,11 +71,11 @@ export class MyServer extends BaseClass {
     /**
      * The ID of the backup.
      */
-    backupId: string;
+    readonly backupId: string;
     /**
      * The date at which the backup was taken.
      */
-    createdAt: Date;
+    readonly createdAt: Date;
   }[];
   /**
    * Information about the server's subscription.
@@ -84,11 +84,11 @@ export class MyServer extends BaseClass {
     /**
      * The package ID of the current active subscription.
      */
-    currentPackageId: number;
+    readonly currentPackageId: number;
     /**
      * The package ID of the next package.
      */
-    nextPackageId?: number;
+    readonly nextPackageId?: number;
   };
   /**
    * A list of {@link Icon}, that the server has unlocked.
@@ -102,11 +102,11 @@ export class MyServer extends BaseClass {
     /**
      * Whether the server is visible from the lobby.
      */
-    lobbyVisible: boolean;
+    readonly lobbyVisible: boolean;
     /**
      * The state of when it can be started from the lobby.
      */
-    startupCommand: number;
+    readonly startupCommand: number;
   };
   /**
    * The server's MotD also known as "Message of the Day".
@@ -119,15 +119,15 @@ export class MyServer extends BaseClass {
     /**
      * The amount of online players.
      */
-    playerCount: number;
+    readonly playerCount: number;
     /**
      * A list of {@link Player} representing all online players.
      */
-    online: Player[];
+    readonly online: Player[];
     /**
      * The max amount of players allowed online at once.
      */
-    maxPlayers: number;
+    readonly maxPlayers: number;
   };
   /**
    * Information about the server's FTP.
@@ -142,7 +142,7 @@ export class MyServer extends BaseClass {
     /**
      * The FTP password.
      */
-    password: string;
+    readonly password: string;
   };
 
   public constructor(client: Client, data: MyServerResponse) {

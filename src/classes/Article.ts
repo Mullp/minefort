@@ -40,15 +40,15 @@ export class Article extends BaseClass {
     /**
      * The URL of the featured image
      */
-    url: string;
+    readonly url: string;
     /**
      * The alt text of the featured image
      */
-    alt?: string;
+    readonly alt?: string;
     /**
      * The caption of the featured image
      */
-    caption?: string;
+    readonly caption?: string;
   };
   /**
    * Whether the article is featured
@@ -81,11 +81,11 @@ export class Article extends BaseClass {
     /**
      * The code injection head content of the article
      */
-    head?: string;
+    readonly head?: string;
     /**
      * The code injection foot content of the article
      */
-    foot?: string;
+    readonly foot?: string;
   };
   /**
    * The custom template of the article
@@ -138,15 +138,15 @@ export class Article extends BaseClass {
     /**
      * The OG image of the article
      */
-    image?: string;
+    readonly image?: string;
     /**
      * The OG title of the article
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The OG description of the article
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The Twitter content of the article
@@ -155,15 +155,15 @@ export class Article extends BaseClass {
     /**
      * The Twitter image of the article
      */
-    image?: string;
+    readonly image?: string;
     /**
      * The Twitter title of the article
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The Twitter description of the article
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The meta content of the article
@@ -172,11 +172,11 @@ export class Article extends BaseClass {
     /**
      * The meta title of the article
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The meta description of the article
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The email subject of the article

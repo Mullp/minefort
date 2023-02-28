@@ -38,15 +38,15 @@ export class ArticleTag extends BaseClass {
     /**
      * The image of the OG content
      */
-    image?: string;
+    readonly image?: string;
     /**
      * The title of the OG content
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The description of the OG content
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The Twitter content of the tag
@@ -55,15 +55,15 @@ export class ArticleTag extends BaseClass {
     /**
      * The image of the Twitter content
      */
-    image?: string;
+    readonly image?: string;
     /**
      * The title of the Twitter content
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The description of the Twitter content
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The meta content of the tag
@@ -72,11 +72,11 @@ export class ArticleTag extends BaseClass {
     /**
      * The title of the meta content
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The description of the meta content
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The code injection of the tag
@@ -85,11 +85,11 @@ export class ArticleTag extends BaseClass {
     /**
      * The head of the code injection
      */
-    head?: string;
+    readonly head?: string;
     /**
      * The foot of the code injection
      */
-    foot?: string;
+    readonly foot?: string;
   };
   /**
    * The canonical URL of the tag

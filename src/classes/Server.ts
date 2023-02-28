@@ -43,15 +43,15 @@ export class Server extends BaseClass {
     /**
      * The amount of online players.
      */
-    playerCount: number;
+    readonly playerCount: number;
     /**
      * A list of UUIDs representing all online players.
      */
-    online?: string[];
+    readonly online?: string[];
     /**
      * The max amount of players allowed online at once.
      */
-    maxPlayers: number;
+    readonly maxPlayers: number;
   };
 
   public constructor(client: Client, data: ServerResponse) {

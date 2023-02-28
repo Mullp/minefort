@@ -54,11 +54,11 @@ export class ArticleAuthor extends BaseClass {
     /**
      * The title of the meta content
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The description of the meta content
      */
-    description?: string;
+    readonly description?: string;
   };
   /**
    * The URL of the author
