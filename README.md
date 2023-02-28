@@ -22,6 +22,7 @@
     * [ES Modules (ESM)](#es-modules--esm-)
     * [CommonJS](#commonjs)
   * [Example usage](#example-usage)
+    * [Simple example to get all of your servers](#simple-example-to-get-all-of-your-servers)
     * [Avoiding conflicts](#avoiding-conflicts)
   * [TypeScript](#typescript)
   * [Team](#team)
@@ -34,6 +35,7 @@ We are not affiliated, associated, authorized, endorsed by, or in any way offici
 You can support this open source project by using the following [affiliate link](https://minefort.com/?r=fn6x52xtos).
 
 ## Installation
+You can use any package manager you want, but we recommend using `yarn`.
 
 ```sh-session
 npm install minefort
@@ -55,15 +57,9 @@ const { Client } = require("minefort");
 
 ## Example usage
 
-Install minefort:
+### Simple example to get all of your servers
 
-```sh-session
-npm install minefort
-yarn add minefort
-pnpm add minefort
-```
-
-Create and authenticate a client, and get all of your servers:
+Create and authenticate a client, and get all of your servers
 
 ```js
 const { Client } = require("minefort");
@@ -72,6 +68,11 @@ const client = new Client();
 
 (async () => {
   await client.authManager.authenticate("username", "password");
+  /**
+   * Note:
+   * You can also just use your session token to authenticate
+   * like this: `client.sessionToken = "sessionToken";`
+   */
 
   const servers = await client.serverManager.getMyServers();
   console.log(servers);

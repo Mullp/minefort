@@ -15,9 +15,9 @@ export class Client {
    */
   public readonly BASE_URL = 'https://api.minefort.com/v1';
   /**
-   * The session cookie. Used to authenticate users.
+   * The session token. Used to authenticate users.
    */
-  public sessionCookie = '';
+  public sessionToken = '';
 
   public readonly authManager: AuthManager = new AuthManager(this);
   public readonly serverManager: ServerManager = new ServerManager(this);
@@ -28,6 +28,6 @@ export class Client {
    * The session cookie with "minefort-session=" appended in front.
    */
   public get cookie(): string {
-    return 'minefort-session=' + this.sessionCookie;
+    return 'minefort-session=' + this.sessionToken;
   }
 }

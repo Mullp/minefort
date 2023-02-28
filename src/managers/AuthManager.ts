@@ -50,7 +50,7 @@ export class AuthManager extends BaseManager {
       .then(value => {
         if (value[0].status === ResponseStatus.OK) {
           if (value[1]) {
-            this.client.sessionCookie = value[1];
+            this.client.sessionToken = value[1];
           }
           return true;
         } else if (value[0].status === ResponseStatus.INVALID_CREDENTIALS) {
