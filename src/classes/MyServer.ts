@@ -144,6 +144,19 @@ export class MyServer extends BaseClass {
      */
     readonly password: string;
   };
+  /**
+   * Information about the server's cross-platform support.
+   */
+  public readonly support: {
+    /**
+     * Whether the server supports cracked players.
+     */
+    readonly offline: boolean;
+    /**
+     * Whether the server supports bedrock players.
+     */
+    readonly bedrock: boolean;
+  };
 
   public constructor(client: Client, data: MyServerResponse) {
     super(client);
@@ -180,6 +193,10 @@ export class MyServer extends BaseClass {
       maxPlayers: data.players.max,
     };
     this.ftp = {password: data.ftp.password};
+    this.support = {
+      offline: data.support.offline,
+      bedrock: data.support.bedrock,
+    };
   }
 
   /**

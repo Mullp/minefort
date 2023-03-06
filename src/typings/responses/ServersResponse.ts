@@ -71,6 +71,10 @@ export type MyServerResponse = {
   messageOfTheDay: string;
   players: {online: number; list: Player[]; max: number};
   ftp: {password: string};
+  support: {
+    offline: boolean;
+    bedrock: boolean;
+  };
 };
 
 export type MyServersResponse = {

@@ -1,4 +1,6 @@
 export type ServerProperties =
+  | 'offline-support'
+  | 'bedrock-support'
   | 'version'
   | 'lobby-visible'
   | 'startup-command'
