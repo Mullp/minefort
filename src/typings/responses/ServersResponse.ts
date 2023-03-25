@@ -2,14 +2,15 @@ import {MinefortApiError, ResponseStatus} from './ResponseStatus';
 import {IconResponse} from './IconResponse';
 
 export enum ServerState {
-  SLEEPING = 0,
-  ARCHIVING = 1,
+  SERVICE_OFFLINE = 0,
+  UPLOADING = 1,
   DOWNLOADING = 2,
   STARTING = 3,
   ONLINE = 4,
   OFFLINE = 5,
   CREATING_BACKUP = 6,
   RESTORING_BACKUP = 7,
+  STOPPING = 8,
 }
 
 export type ServerResponse = {
