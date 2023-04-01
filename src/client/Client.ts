@@ -25,7 +25,7 @@ export class Client {
   public readonly networkManager: NetworkManager = new NetworkManager(this);
 
   /**
-   * The session cookie with "minefort-session=" appended in front.
+   * The session token with "minefort-session=" appended in front.
    */
   public get cookie(): string {
     return 'minefort-session=' + this.sessionToken;

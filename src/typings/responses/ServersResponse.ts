@@ -71,7 +71,6 @@ export type MyServerResponse = {
   settings: {lobbyVisible: boolean; startupCommand: number};
   messageOfTheDay: string;
   players: {online: number; list: Player[]; max: number};
-  ftp: {password: string};
   support: {
     offline: boolean;
     bedrock: boolean;

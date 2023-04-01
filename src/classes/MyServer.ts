@@ -130,21 +130,6 @@ export class MyServer extends BaseClass {
     readonly maxPlayers: number;
   };
   /**
-   * Information about the server's FTP.
-   * Note: The FTP username is the server's {@link id}
-   * @example Connection information.
-   * Host: ftp.minefort.com
-   * Port: 21
-   * FTP Username: // The server's ID
-   * FTP Password: // Stored under this.ftp.password
-   */
-  public readonly ftp: {
-    /**
-     * The FTP password.
-     */
-    readonly password: string;
-  };
-  /**
    * Information about the server's cross-platform support.
    */
   public readonly support: {
@@ -192,7 +177,6 @@ export class MyServer extends BaseClass {
       online: data.players.list,
       maxPlayers: data.players.max,
     };
-    this.ftp = {password: data.ftp.password};
     this.support = {
       offline: data.support.offline,
       bedrock: data.support.bedrock,
