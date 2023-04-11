@@ -74,7 +74,7 @@ export class ServerManager extends BaseManager {
       sortOrder?: 'desc' | 'asc';
     } = {paginationSkip: 0, limit: 500, sortOrder: 'desc'}
   ): Promise<Server[]> {
-    return await fetch(this.client.BASE_URL + '/list', {
+    return await fetch(this.client.BASE_URL + '/servers/list', {
       method: 'POST',
       body: JSON.stringify({
         pagination: {
