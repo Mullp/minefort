@@ -17,6 +17,7 @@ import {
   ServerPropertyChangeResponse,
   ServerSleepResponse,
   ServerStartResponse,
+  ServerState,
   ServerStopResponse,
   ServerWakeupResponse,
   SubUserResponse,
@@ -127,6 +128,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may already be running');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -156,6 +161,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           );
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -185,6 +194,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           );
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -212,6 +225,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -239,6 +256,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may already be asleep');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -271,6 +292,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid credentials');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be running');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -297,6 +322,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return [];
@@ -325,6 +354,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return new Map();
@@ -357,6 +390,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -393,6 +430,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -425,6 +466,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Server or icon is not found');
         } else if (value.status === ResponseStatus.INSUFFICIENT_BALANCE) {
           throw new Error('Insufficient balance');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;
@@ -461,6 +506,10 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
         }
 
         return false;

@@ -1,8 +1,4 @@
-import {
-  IconManager,
-  NetworkManager,
-  ServerManager,
-} from '../managers';
+import {IconManager, NetworkManager, ServerManager} from '../managers';
 import {
   AuthResponse,
   GetMeReturn,
