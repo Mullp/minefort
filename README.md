@@ -7,6 +7,7 @@
 	<p>
 		<a href="https://www.npmjs.com/package/minefort"><img src="https://img.shields.io/npm/v/minefort.svg?maxAge=3600" alt="npm version" /></a>
 		<a href="https://www.npmjs.com/package/minefort"><img src="https://img.shields.io/npm/dt/minefort.svg?maxAge=3600" alt="npm downloads" /></a>
+		<a href="https://github.com/google/gts"><img src="https://img.shields.io/badge/code%20style-google-blueviolet.svg" alt="Code Style: Google" /></a>
 	</p>
 </div>
 
@@ -19,7 +20,7 @@
   * [Affiliate link](#affiliate-link)
   * [Installation](#installation)
   * [Loading the module](#loading-the-module)
-    * [ES Modules (ESM)](#es-modules--esm-)
+    * [ES Modules (ESM)](#es-modules-esm)
     * [CommonJS](#commonjs)
   * [Example usage](#example-usage)
     * [Simple example to get all of your servers](#simple-example-to-get-all-of-your-servers)
@@ -59,7 +60,7 @@ const { Client } = require("minefort");
 
 ### Simple example to get all of your servers
 
-Create and authenticate a client, and get all of your servers
+Create and authenticate a client, and get all of your servers.
 
 ```js
 const { Client } = require("minefort");
@@ -67,14 +68,14 @@ const { Client } = require("minefort");
 const client = new Client();
 
 (async () => {
-  await client.authManager.authenticate("username", "password");
+  await client.auth("username", "password");
   /**
    * Note:
    * You can also just use your session token to authenticate
    * like this: `client.sessionToken = "sessionToken";`
    */
 
-  const servers = await client.serverManager.getMyServers();
+  const servers = await client.servers.getMyServers();
   console.log(servers);
 })();
 ```

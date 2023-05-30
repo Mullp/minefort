@@ -1,17 +1,13 @@
 import {MinefortApiError, ResponseStatus} from './ResponseStatus';
 import {IconResponse} from './IconResponse';
+import {ServerCategory, ServerState, SubUserRole} from '../ServerTypings';
 
-export enum ServerState {
-  SERVICE_OFFLINE = 0,
-  UPLOADING = 1,
-  DOWNLOADING = 2,
-  STARTING = 3,
-  ONLINE = 4,
-  OFFLINE = 5,
-  CREATING_BACKUP = 6,
-  RESTORING_BACKUP = 7,
-  STOPPING = 8,
-}
+export type SubUserResponse = {
+  userId: string;
+  email?: string;
+  role: SubUserRole;
+  accepted: boolean;
+};
 
 export type ServerResponse = {
   serverId: string;
@@ -23,13 +19,13 @@ export type ServerResponse = {
   messageOfTheDay: string;
   players: {
     online: number;
-    list?: Pick<Player, 'uuid'>[];
+    list?: Pick<PlayerResponse, 'uuid'>[];
     max: number;
   };
 };
 
 export type ServersResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -54,7 +50,13 @@ export type MyServerResponse = {
   serverIcon: IconResponse;
   userId: string;
   version: string;
+  category: ServerCategory;
+  subUsers: SubUserResponse[];
   state: ServerState;
+  support: {
+    offline: boolean;
+    bedrock: boolean;
+  };
   usage: {
     ram: number;
     disk: number;
@@ -68,17 +70,13 @@ export type MyServerResponse = {
     nextPackageId?: number;
   };
   unlockedIcons: IconResponse[];
-  settings: {lobbyVisible: boolean; startupCommand: number};
+  settings: {lobbyVisible: boolean; startupCommand: number; cosmetics: boolean};
   messageOfTheDay: string;
-  players: {online: number; list: Player[]; max: number};
-  support: {
-    offline: boolean;
-    bedrock: boolean;
-  };
+  players: {online: number; list: PlayerResponse[]; max: number};
 };
 
 export type MyServersResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -89,13 +87,13 @@ export type MyServersResponse = {
     }
 );
 
-export type Player = {
+export type PlayerResponse = {
   name: string;
   uuid: string;
 };
 
 export type ServerWakeupResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -109,11 +107,17 @@ export type ServerWakeupResponse = {
     }
   | {
       status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
     }
 );
 
 export type ServerStartResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -127,11 +131,17 @@ export type ServerStartResponse = {
     }
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
     }
 );
 
 export type ServerStopResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -145,11 +155,17 @@ export type ServerStopResponse = {
     }
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
     }
 );
 
 export type ServerKillResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -163,11 +179,17 @@ export type ServerKillResponse = {
     }
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
     }
 );
 
 export type ServerSleepResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -182,10 +204,16 @@ export type ServerSleepResponse = {
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerDeleteResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -204,10 +232,16 @@ export type ServerDeleteResponse = {
   | {
       status: ResponseStatus.INVALID_STATE;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerNameAvailableResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -223,7 +257,7 @@ export type ServerNameAvailableResponse = {
 );
 
 export type ServerNameChangeResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -245,10 +279,16 @@ export type ServerNameChangeResponse = {
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerMotdChangeResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -267,10 +307,16 @@ export type ServerMotdChangeResponse = {
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerPropertyChangeResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -292,10 +338,13 @@ export type ServerPropertyChangeResponse = {
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
     }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerIconChangeResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -313,10 +362,16 @@ export type ServerIconChangeResponse = {
   | {
       status: ResponseStatus.INSUFFICIENT_BALANCE;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerConsoleResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -331,10 +386,16 @@ export type ServerConsoleResponse = {
   | {
       status: ResponseStatus.ITEM_NOT_FOUND;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerPropertiesResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -351,10 +412,16 @@ export type ServerPropertiesResponse = {
   | {
       status: ResponseStatus.NOT_AUTHENTICATED;
     }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
 );
 
 export type ServerCreateResponse = {
-  time: number;
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
@@ -374,5 +441,116 @@ export type ServerCreateResponse = {
     }
   | {
       status: ResponseStatus.SERVER_ACCOUNT_LIMIT;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+);
+
+export type ServerSubUsersResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: SubUserResponse[];
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+);
+
+export type ServerSubUserUpdateResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+);
+
+export type ServerSubUserDeleteResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+);
+
+export type ServerSubUserInviteResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
     }
 );
