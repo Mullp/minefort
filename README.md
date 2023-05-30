@@ -68,14 +68,14 @@ const { Client } = require("minefort");
 const client = new Client();
 
 (async () => {
-  await client.authManager.authenticate("username", "password");
+  await client.auth("username", "password");
   /**
    * Note:
    * You can also just use your session token to authenticate
    * like this: `client.sessionToken = "sessionToken";`
    */
 
-  const servers = await client.serverManager.getMyServers();
+  const servers = await client.servers.getMyServers();
   console.log(servers);
 })();
 ```
