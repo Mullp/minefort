@@ -1,5 +1,4 @@
 import {
-  AuthManager,
   IconManager,
   NetworkManager,
   ServerManager,
@@ -25,9 +24,18 @@ export class Client {
    */
   public sessionToken = '';
 
-  public readonly serverManager: ServerManager = new ServerManager(this);
-  public readonly iconManager: IconManager = new IconManager(this);
-  public readonly networkManager: NetworkManager = new NetworkManager(this);
+  /**
+   * The {@link ServerManager} used to access server related methods.
+   */
+  public readonly servers: ServerManager = new ServerManager(this);
+  /**
+   * The {@link IconManager} used to access icon related methods.
+   */
+  public readonly icons: IconManager = new IconManager(this);
+  /**
+   * The {@link NetworkManager} used to access network related methods.
+   */
+  public readonly network: NetworkManager = new NetworkManager(this);
 
   /**
    * The session token with "minefort-session=" appended in front.
