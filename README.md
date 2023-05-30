@@ -7,6 +7,7 @@
 	<p>
 		<a href="https://www.npmjs.com/package/minefort"><img src="https://img.shields.io/npm/v/minefort.svg?maxAge=3600" alt="npm version" /></a>
 		<a href="https://www.npmjs.com/package/minefort"><img src="https://img.shields.io/npm/dt/minefort.svg?maxAge=3600" alt="npm downloads" /></a>
+		<a href="https://github.com/google/gts"><img src="https://img.shields.io/badge/code%20style-google-blueviolet.svg" alt="Code Style: Google" /></a>
 	</p>
 </div>
 
@@ -19,7 +20,7 @@
   * [Affiliate link](#affiliate-link)
   * [Installation](#installation)
   * [Loading the module](#loading-the-module)
-    * [ES Modules (ESM)](#es-modules--esm-)
+    * [ES Modules (ESM)](#es-modules-esm)
     * [CommonJS](#commonjs)
   * [Example usage](#example-usage)
     * [Simple example to get all of your servers](#simple-example-to-get-all-of-your-servers)
