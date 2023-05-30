@@ -610,8 +610,6 @@ export class MyServer extends BaseClass implements MyServerInterface {
     })
       .then(res => res.json() as Promise<ServerSubUserDeleteResponse>)
       .then(value => {
-        console.log(value);
-
         if (value.status === ResponseStatus.OK) {
           return true;
         } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
