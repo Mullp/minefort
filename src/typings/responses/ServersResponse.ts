@@ -13,6 +13,30 @@ export enum ServerState {
   STOPPING = 8,
 }
 
+export enum ServerCategory {
+  DEFAULT = 'DEFAULT',
+  SKYBLOCK = 'SKYBLOCK',
+  SURVIVAL = 'SURVIVAL',
+  CREATIVE = 'CREATIVE',
+  GENS = 'GENS',
+  PRISON = 'PRISON',
+  PVP = 'PVP',
+  ADVENTURE = 'ADVENTURE',
+}
+
+export enum SubUserRole {
+  VIEWER = 0,
+  MODERATOR = 1,
+  ADMIN = 2,
+}
+
+export type SubUserResponse = {
+  userId: string;
+  email?: string;
+  role: SubUserRole;
+  accepted: boolean;
+};
+
 export type ServerResponse = {
   serverId: string;
   serverName: string;
@@ -23,7 +47,7 @@ export type ServerResponse = {
   messageOfTheDay: string;
   players: {
     online: number;
-    list?: Pick<Player, 'uuid'>[];
+    list?: Pick<PlayerResponse, 'uuid'>[];
     max: number;
   };
 };
@@ -54,7 +78,13 @@ export type MyServerResponse = {
   serverIcon: IconResponse;
   userId: string;
   version: string;
+  category: ServerCategory;
+  subUsers: SubUserResponse[];
   state: ServerState;
+  support: {
+    offline: boolean;
+    bedrock: boolean;
+  };
   usage: {
     ram: number;
     disk: number;
@@ -68,13 +98,9 @@ export type MyServerResponse = {
     nextPackageId?: number;
   };
   unlockedIcons: IconResponse[];
-  settings: {lobbyVisible: boolean; startupCommand: number};
+  settings: {lobbyVisible: boolean; startupCommand: number; cosmetics: boolean};
   messageOfTheDay: string;
-  players: {online: number; list: Player[]; max: number};
-  support: {
-    offline: boolean;
-    bedrock: boolean;
-  };
+  players: {online: number; list: PlayerResponse[]; max: number};
 };
 
 export type MyServersResponse = {
@@ -89,7 +115,7 @@ export type MyServersResponse = {
     }
 );
 
-export type Player = {
+export type PlayerResponse = {
   name: string;
   uuid: string;
 };

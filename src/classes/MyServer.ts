@@ -2,8 +2,8 @@ import {BaseClass} from './Base';
 import {Client} from '../client';
 import {
   MyServerResponse,
-  Player,
-  ResponseStatus,
+  PlayerResponse,
+  ResponseStatus, ServerCategory,
   ServerConsoleResponse,
   ServerDeleteResponse,
   ServerIconChangeResponse,
@@ -17,7 +17,7 @@ import {
   ServerStartResponse,
   ServerState,
   ServerStopResponse,
-  ServerWakeupResponse,
+  ServerWakeupResponse, SubUserResponse,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
@@ -48,9 +48,30 @@ export class MyServer extends BaseClass {
    */
   public readonly version: string;
   /**
+   * The category of the server.
+   */
+  public readonly category: ServerCategory;
+  /**
+   * The sub users of the server.
+   */
+  public readonly subUsers: SubUserResponse[];
+  /**
    * The state of the server.
    */
   public readonly state: ServerState;
+  /**
+   * Information about the server's cross-platform support.
+   */
+  public readonly support: {
+    /**
+     * Whether the server supports cracked players.
+     */
+    readonly offline: boolean;
+    /**
+     * Whether the server supports bedrock players.
+     */
+    readonly bedrock: boolean;
+  };
   /**
    * Information about the server's usage.
    */
@@ -107,6 +128,10 @@ export class MyServer extends BaseClass {
      * The state of when it can be started from the lobby.
      */
     readonly startupCommand: number;
+    /**
+     * Whether cosmetics are enabled.
+     */
+    readonly cosmetics: boolean;
   };
   /**
    * The server's MotD also known as "Message of the Day".
@@ -121,26 +146,13 @@ export class MyServer extends BaseClass {
      */
     readonly playerCount: number;
     /**
-     * A list of {@link Player} representing all online players.
+     * A list of {@link PlayerResponse} representing all online players.
      */
-    readonly online: Player[];
+    readonly online: PlayerResponse[];
     /**
      * The max amount of players allowed online at once.
      */
     readonly maxPlayers: number;
-  };
-  /**
-   * Information about the server's cross-platform support.
-   */
-  public readonly support: {
-    /**
-     * Whether the server supports cracked players.
-     */
-    readonly offline: boolean;
-    /**
-     * Whether the server supports bedrock players.
-     */
-    readonly bedrock: boolean;
   };
 
   public constructor(client: Client, data: MyServerResponse) {
@@ -151,7 +163,13 @@ export class MyServer extends BaseClass {
     this.icon = new Icon(client, data.serverIcon);
     this.userId = data.userId;
     this.version = data.version;
+    this.category = data.category;
+    this.subUsers = data.subUsers;
     this.state = data.state;
+    this.support = {
+      offline: data.support.offline,
+      bedrock: data.support.bedrock,
+    };
     this.usage = {
       diskUsage: data.usage.disk,
       ramUsage: data.usage.ram,
@@ -170,16 +188,13 @@ export class MyServer extends BaseClass {
     this.settings = {
       lobbyVisible: data.settings.lobbyVisible,
       startupCommand: data.settings.startupCommand,
+      cosmetics: data.settings.cosmetics,
     };
     this.motd = data.messageOfTheDay;
     this.playerData = {
       playerCount: data.players.online,
       online: data.players.list,
       maxPlayers: data.players.max,
-    };
-    this.support = {
-      offline: data.support.offline,
-      bedrock: data.support.bedrock,
     };
   }
 
