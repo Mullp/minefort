@@ -233,6 +233,18 @@ export interface MyServerInterface {
   getProperties(): Promise<Map<string, string | number | boolean | null>>;
 
   /**
+   * Gets the server's sub users.
+   * @returns A promise that resolves to a list of {@link SubUserResponse} representing the server's sub users.
+   * @throws {Error} - Will throw an error if not authenticated, if the server is in an invalid state, or if the server is not found.
+   * @example
+   * const subUsers = await server.getSubUsers()
+   *   .catch(error => {
+   *     console.error(error);
+   *   });
+   */
+  getSubUsers(): Promise<SubUserResponse[]>;
+
+  /**
    * Sets the motd of the server.
    * @param motd - The new motd of the server.
    * @returns A promise that resolves to a boolean value indicating whether the server's motd was successfully changed or not.

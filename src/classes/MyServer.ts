@@ -19,6 +19,7 @@ import {
   ServerStartResponse,
   ServerState,
   ServerStopResponse,
+  ServerSubUsersResponse,
   ServerWakeupResponse,
   SubUserResponse,
 } from '../typings';
@@ -361,6 +362,36 @@ export class MyServer extends BaseClass implements MyServerInterface {
         }
 
         return new Map();
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async getSubUsers(): Promise<SubUserResponse[]> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/subusers`, {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+      },
+    })
+      .then(res => res.json() as Promise<ServerSubUsersResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return [];
       })
       .catch(error => {
         throw error;

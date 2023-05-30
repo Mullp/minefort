@@ -461,6 +461,9 @@ export type ServerSubUsersResponse = {
       status: ResponseStatus.INVALID_STATE;
     }
   | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
       status: ResponseStatus.INTERNAL_ERROR;
     }
   | {

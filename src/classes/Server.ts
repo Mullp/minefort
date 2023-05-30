@@ -1,6 +1,6 @@
 import {BaseClass} from './Base';
 import {Client} from '../client';
-import {ServerResponse} from '../typings';
+import {ServerResponse, ServerState} from '../typings';
 import {Icon} from './Icon';
 
 /**
