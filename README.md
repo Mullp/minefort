@@ -60,7 +60,7 @@ const { Client } = require("minefort");
 
 ### Simple example to get all of your servers
 
-Create and authenticate a client, and get all of your servers
+Create and authenticate a client, and get all of your servers.
 
 ```js
 const { Client } = require("minefort");
