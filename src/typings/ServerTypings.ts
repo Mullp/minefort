@@ -36,6 +36,7 @@ export enum SubUserRole {
   VIEWER = 0,
   MODERATOR = 1,
   ADMIN = 2,
+  OWNER = 3,
 }
 
 export enum ServerState {

@@ -470,3 +470,87 @@ export type ServerSubUsersResponse = {
       status: ResponseStatus.NO_PERMISSION;
     }
 );
+
+export type ServerSubUserUpdateResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+);
+
+export type ServerSubUserDeleteResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+);
+
+export type ServerSubUserInviteResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+);

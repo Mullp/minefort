@@ -1,6 +1,11 @@
 import {Icon} from '../../classes';
 import {PlayerResponse, SubUserResponse} from '../responses';
-import {ServerCategory, ServerProperties, ServerState} from '../ServerTypings';
+import {
+  ServerCategory,
+  ServerProperties,
+  ServerState,
+  SubUserRole,
+} from '../ServerTypings';
 
 export interface MyServerInterface {
   /**
@@ -324,4 +329,30 @@ export interface MyServerInterface {
     property: ServerProperties,
     value: string | number | boolean
   ): Promise<boolean>;
+
+  /**
+   * Updates a sub user's role.
+   * @param userId - The ID of the sub user.
+   * @param role - The new role of the sub user.
+   * @returns A promise that resolves to a boolean value indicating whether the sub user's role was successfully changed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
+   */
+  updateSubUser(userId: string, role: SubUserRole): Promise<boolean>;
+
+  /**
+   * Deletes a sub user.
+   * @param userId - The ID of the sub user.
+   * @returns A promise that resolves to a boolean value indicating whether the sub user was successfully deleted or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
+   */
+  deleteSubUser(userId: string): Promise<boolean>;
+
+  /**
+   * Invites a sub user.
+   * @param email - The email of the sub user.
+   * @param role - The role of the sub user.
+   * @returns A promise that resolves to a boolean value indicating whether the sub user was successfully invited or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
+   */
+  inviteSubUser(email: string, role: SubUserRole): Promise<boolean>;
 }

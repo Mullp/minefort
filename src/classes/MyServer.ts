@@ -19,9 +19,13 @@ import {
   ServerStartResponse,
   ServerState,
   ServerStopResponse,
+  ServerSubUserDeleteResponse,
+  ServerSubUserInviteResponse,
   ServerSubUsersResponse,
+  ServerSubUserUpdateResponse,
   ServerWakeupResponse,
   SubUserResponse,
+  SubUserRole,
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
@@ -537,6 +541,130 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async updateSubUser(
+    userId: string,
+    role: SubUserRole
+  ): Promise<boolean> {
+    return await fetch(
+      this.client.BASE_URL + `/server/${this.id}/subusers/update`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: userId,
+          role: role,
+        }),
+        headers: {
+          Cookie: this.client.cookie,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then(res => res.json() as Promise<ServerSubUserUpdateResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Sub user is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async deleteSubUser(userId: string): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/subusers`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        userId: userId,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerSubUserDeleteResponse>)
+      .then(value => {
+        console.log(value);
+
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Sub user is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async inviteSubUser(
+    email: string,
+    role: SubUserRole
+  ): Promise<boolean> {
+    return await fetch(
+      this.client.BASE_URL + `/server/${this.id}/subusers/invite`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          emailAddress: email,
+          role: role,
+        }),
+        headers: {
+          Cookie: this.client.cookie,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then(res => res.json() as Promise<ServerSubUserInviteResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('No user with that email is found');
         } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
           throw new Error('Internal error');
         } else if (value.status === ResponseStatus.NO_PERMISSION) {
