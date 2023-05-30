@@ -40,13 +40,12 @@ export class Client {
    * Authenticate a user.
    * @param email - Email address of the user.
    * @param password - Password of the user.
-   * @return A promise that resolves to a boolean value indicating whether the authentication was successful or not.
+   * @return A promise that resolves to the session token.
    * @throws {Error} - Throws an error if the input or credentials are invalid.
    * @example
-   * const authManager = client.authManager;
-   * const success = await authManager.authenticate('email', 'password');
+   * const token = await client.auth('email', 'password');
    */
-  public async auth(email: string, password: string): Promise<boolean> {
+  public async auth(email: string, password: string): Promise<string> {
     return await fetch(this.BASE_URL + '/auth/login', {
       method: 'POST',
       body: JSON.stringify({
@@ -70,15 +69,16 @@ export class Client {
         if (value[0].status === ResponseStatus.OK) {
           if (value[1]) {
             this.sessionToken = value[1];
+            return value[1];
           }
-          return true;
+          throw new Error('No session token');
         } else if (value[0].status === ResponseStatus.INVALID_CREDENTIALS) {
           throw new Error('Invalid credentials');
         } else if (value[0].status === ResponseStatus.INVALID_INPUT) {
           throw new Error('Invalid input: ' + value[0].error.body[0].message);
         }
 
-        return false;
+        throw new Error('Unknown error');
       })
       .catch(error => {
         throw error;
