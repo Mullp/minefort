@@ -33,11 +33,11 @@
     "prepublishOnly": "gts lint && gts clean && npm.cmd run compile"
   },
   "devDependencies": {
-    "@types/node": "^14.11.2",
-    "gts": "^3.1.1",
-    "typescript": "~4.7.0"
+    "@types/node": "^20.2.5",
+    "gts": "^4.0.1",
+    "typescript": "~5.0.4"
   },
   "dependencies": {
-    "cross-fetch": "^3.1.5"
+    "cross-fetch": "^3.1.6"
   }
 }
