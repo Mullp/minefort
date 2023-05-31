@@ -1,4 +1,4 @@
-import {MyServer, Server} from '../../../classes';
+import {MyServer, Server, Plugin} from '../../../classes';
 
 export interface ServerManagerInterface {
   /**
@@ -71,6 +71,27 @@ export interface ServerManagerInterface {
     serverIdOrName: string,
     options: {byName?: boolean}
   ): Promise<MyServer | null>;
+
+  /**
+   * Gets plugins.
+   * @param options - Options to the method.
+   * @param options.search - The search query.
+   * @param options.paginationSkip - The amount of plugins to skip.
+   * @param options.limit - The amount of plugins to get.
+   * @param options.sortOrder - The order to sort the plugins by.
+   * @returns A promise that resolves to the plugins.
+   * @throws {Error} - Will throw an error if the input is invalid or an internal server error had happened.
+   * @example
+   * // Get 5 plugins related to "skript".
+   * const plugins = await client.server.getPlugins({ search: 'skript', limit: 5 });
+   * console.log(plugins);
+   */
+  getPlugins(options: {
+    search?: string;
+    paginationSkip?: number;
+    limit?: number;
+    sortOrder?: 'desc' | 'asc';
+  }): Promise<Plugin[]>;
 
   /**
    * Creates a server.

@@ -5,3 +5,4 @@ export * from './ArticleTagInterface';
 export * from './BaseClassInterface';
 export * from './IconInterface';
 export * from './ServerInterface';
+export * from './PluginInterface';

@@ -9,6 +9,35 @@ export type SubUserResponse = {
   accepted: boolean;
 };
 
+export type PluginTypeResponse = {
+  pluginId: string;
+  versionId: number;
+  name: string;
+  description: string;
+  icon: string;
+  installable: boolean;
+};
+
+export type PluginsResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: PluginTypeResponse[];
+      pagination: {
+        more: boolean;
+        total: number;
+      };
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+);
+
 export type ServerResponse = {
   serverId: string;
   serverName: string;

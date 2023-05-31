@@ -4,7 +4,7 @@ import {ServerInterface, ServerResponse, ServerState} from '../typings';
 import {Icon} from './Icon';
 
 /**
- * Represents a server of a user.
+ * Represents a server.
  * @extends {BaseClass}
  */
 export class Server extends BaseClass implements ServerInterface {
