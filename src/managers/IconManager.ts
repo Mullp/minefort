@@ -1,27 +1,18 @@
 import {BaseManager} from './BaseManager';
 import {Client} from '../client';
 import fetch from 'cross-fetch';
-import {IconsResponse, ResponseStatus} from '../typings';
+import {IconManagerInterfeace, IconsResponse, ResponseStatus} from '../typings';
 import {Icon} from '../classes';
 
 /**
  * Manages API methods for icons.
  * @extends {BaseManager}
  */
-export class IconManager extends BaseManager {
+export class IconManager extends BaseManager implements IconManagerInterfeace {
   public constructor(client: Client) {
     super(client);
   }
 
-  /**
-   * Gets all icons.
-   * @returns A promise that resolves to an array of {@link Icon} objects.
-   * @throws {Error} - Will throw an error if the user is not authenticated.
-   * @example
-   * // Get all icons.
-   * const iconManager = client.iconManager;
-   * const icons = await iconManager.getIcons();
-   */
   public async getIcons(): Promise<Icon[]> {
     return await fetch(this.client.BASE_URL + '/server/icons', {
       method: 'GET',
@@ -44,22 +35,6 @@ export class IconManager extends BaseManager {
       });
   }
 
-  /**
-   * Gets an icon by its ID or name.
-   * @param iconIdOrName - The ID or name of the icon to get.
-   * @param options - Options to the method.
-   * @param options.byName - Whether to get the icon by its name or not.
-   * @returns An {@link Icon} instance.
-   * @throws {Error} - Will throw an error if the user is not authenticated.
-   * @example
-   * // Get an icon by its ID.
-   * const iconManager = client.iconManager;
-   * const icon = await iconManager.getIcon('iconId');
-   * @example
-   * // Get an icon by its name.
-   * const iconManager = client.iconManager;
-   * const icon = await iconManager.getIcon('iconName', { byName: true });
-   */
   public async getIcon(
     iconIdOrName: string,
     options: {byName?: boolean} = {byName: false}
