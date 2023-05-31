@@ -2,7 +2,7 @@ import {
   ResponseStatus,
   UserAffiliateStatsResponse,
   UserMeResponse,
-} from '../responses';
+} from '../../responses';
 
 export interface UserManagerInterface {
   /**

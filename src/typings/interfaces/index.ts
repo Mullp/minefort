@@ -1,2 +1,2 @@
-export * from './MyServerInterface';
-export * from './UserManagerInterface';
+export * from './classes';
+export * from './managers';

@@ -1,11 +1,11 @@
-import {Icon} from '../../classes';
-import {PlayerResponse, SubUserResponse} from '../responses';
+import {Icon} from '../../../classes';
 import {
   ServerCategory,
   ServerProperties,
   ServerState,
   SubUserRole,
-} from '../ServerTypings';
+} from '../../ServerTypings';
+import {PlayerResponse, SubUserResponse} from '../../responses';
 
 export interface MyServerInterface {
   /**
