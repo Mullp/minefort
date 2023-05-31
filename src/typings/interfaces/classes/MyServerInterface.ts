@@ -1,4 +1,4 @@
-import {Icon} from '../../../classes';
+import {Icon, Plugin} from '../../../classes';
 import {
   ServerCategory,
   ServerProperties,
@@ -355,4 +355,20 @@ export interface MyServerInterface {
    * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
    */
   inviteSubUser(email: string, role: SubUserRole): Promise<boolean>;
+
+  /**
+   * Installs a plugin on the server.
+   * @param pluginId - The ID of the plugin to install.
+   * @returns A promise that resolves to a boolean value indicating whether the plugin was successfully installed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, if the server is not found, or if the plugin is not found.
+   */
+  installPlugin(pluginId: string): Promise<boolean>;
+
+  /**
+   * Installs a plugin on the server.
+   * @param plugin - The plugin to install.
+   * @returns A promise that resolves to a boolean value indicating whether the plugin was successfully installed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, if the server is not found, or if the plugin is not found.
+   */
+  installPlugin(plugin: Plugin): Promise<boolean>;
 }

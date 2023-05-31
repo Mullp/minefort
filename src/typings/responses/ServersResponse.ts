@@ -38,6 +38,34 @@ export type PluginsResponse = {
     }
 );
 
+export type ServerPluginInstallResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+);
+
 export type ServerResponse = {
   serverId: string;
   serverName: string;
