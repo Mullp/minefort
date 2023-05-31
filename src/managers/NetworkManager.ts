@@ -5,6 +5,7 @@ import {
   NetworkManagerInterface,
   ResponseStatus,
   ArticlesResponse,
+  ArticleResponse,
 } from '../typings';
 import {Article} from '../classes';
 
@@ -39,10 +40,19 @@ export class NetworkManager
       });
   }
 
-  public async getArticle(articleId: string): Promise<Article | null> {
-    return await this.getArticles()
-      .then(articles => {
-        return articles.find(article => article.id === articleId) ?? null;
+  public async getArticle(slug: string): Promise<Article> {
+    return await fetch(this.client.BASE_URL + '/blog/articles/' + slug, {
+      method: 'GET',
+    })
+      .then(res => res.json() as Promise<ArticleResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return new Article(this.client, value.result);
+        } else if (value.status === ResponseStatus.ENDPOINT_NOT_FOUND) {
+          throw new Error('Article not found');
+        }
+
+        throw new Error('Unknown error');
       })
       .catch(error => {
         throw error;

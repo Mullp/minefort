@@ -1,6 +1,6 @@
 import {BaseClass} from './Base';
 import {Client} from '../client';
-import {ArticleInterface, ArticleResponse} from '../typings';
+import {ArticleInterface, ArticleTypeResponse} from '../typings';
 import {ArticleAuthor} from './ArticleAuthor';
 import {ArticleTag} from './ArticleTag';
 
@@ -58,7 +58,7 @@ export class Article extends BaseClass implements ArticleInterface {
   public readonly emailSubject?: string;
   public readonly frontmatter?: string;
 
-  public constructor(client: Client, data: ArticleResponse) {
+  public constructor(client: Client, data: ArticleTypeResponse) {
     super(client);
 
     this.id = data.id;

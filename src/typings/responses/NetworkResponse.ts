@@ -1,6 +1,6 @@
 import {ResponseStatus} from './ResponseStatus';
 
-export type ArticleResponse = {
+export type ArticleTypeResponse = {
   id: string;
   uuid: string;
   title: string;
@@ -79,12 +79,24 @@ export type ArticleTagResponse = {
   url: string;
 };
 
-export type ArticlesResponse = {
-  time: number;
+export type ArticleResponse = {
+  time?: number;
 } & (
   | {
       status: ResponseStatus.OK;
-      result: ArticleResponse[];
+      result: ArticleTypeResponse;
+    }
+  | {
+      status: ResponseStatus.ENDPOINT_NOT_FOUND;
+    }
+);
+
+export type ArticlesResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: ArticleTypeResponse[];
     }
   | {
       status: ResponseStatus.INTERNAL_ERROR;

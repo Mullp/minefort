@@ -13,14 +13,14 @@ export interface NetworkManagerInterface {
   getArticles(): Promise<Article[]>;
 
   /**
-   * Gets an article by its ID.
-   * @param articleId - The ID of the article to get.
-   * @returns An {@link Article} instance or `null` if no article was found.
-   * @throws {Error} - Will throw an error if an internal error occurs.
+   * Gets an article by its slug.
+   * @param slug - The slug of the article to get.
+   * @returns An {@link Article} instance.
+   * @throws {Error} - Will throw an error if no article with the specified slug exists or if an internal error occurs.
    * @example
-   * // Get an article by its ID.
-   * const article = await client.network.getArticle('article ID');
+   * // Get an article by its slug.
+   * const article = await client.network.getArticle('article slug');
    * console.log(article);
    */
-  getArticle(articleId: string): Promise<Article | null>;
+  getArticle(slug: string): Promise<Article>;
 }
