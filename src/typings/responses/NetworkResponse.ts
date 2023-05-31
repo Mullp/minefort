@@ -18,8 +18,8 @@ export type ArticleResponse = {
   codeinjection_foot: string | null;
   custom_template: string | null;
   canonical_url: string | null;
-  authors: ArticleAuthorResponse[];
   tags: ArticleTagResponse[];
+  authors: ArticleAuthorResponse[];
   primary_author: ArticleAuthorResponse;
   primary_tag: ArticleTagResponse;
   url: string;
