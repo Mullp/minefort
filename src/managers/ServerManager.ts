@@ -3,32 +3,27 @@ import {Client} from '../client';
 import fetch from 'cross-fetch';
 import {
   MyServersResponse,
+  PluginsResponse,
   ResponseStatus,
   ServerCreateResponse,
+  ServerManagerInterface,
   ServerNameAvailableResponse,
   ServersResponse,
 } from '../typings';
-import {MyServer, Server} from '../classes';
+import {MyServer, Server, Plugin} from '../classes';
 
 /**
  * Manages API methods for servers.
  * @extends {BaseManager}
  */
-export class ServerManager extends BaseManager {
+export class ServerManager
+  extends BaseManager
+  implements ServerManagerInterface
+{
   public constructor(client: Client) {
     super(client);
   }
 
-  /**
-   * Check if a server name is available.
-   * @param serverName - The name of the server to check.
-   * @returns A promise that resolves to a boolean indicating if the server name is available or not.
-   * @throws {Error} - Will throw an error if the user is not authenticated or the input is invalid.
-   * @example
-   * // Check if a server name is available.
-   * const serverManager = client.serverManager;
-   * const available = await serverManager.isNameAvailable('serverName');
-   */
   public async isNameAvailable(serverName: string): Promise<boolean> {
     return await fetch(this.client.BASE_URL + '/server/availability', {
       method: 'POST',
@@ -57,16 +52,6 @@ export class ServerManager extends BaseManager {
       });
   }
 
-  /**
-   * Gets all online servers.
-   * @param options - Options to the method.
-   * @return A promise that resolves to all the online servers.
-   * @throws {Error} - Will throw an error if the input is invalid or an internal server error had happened.
-   * @example
-   * // Get the user's servers.
-   * const serverManager = client.serverManager;
-   * const servers = await serverManager.getOnlineServers();
-   */
   public async getOnlineServers(
     options: {
       paginationSkip?: number;
@@ -78,12 +63,12 @@ export class ServerManager extends BaseManager {
       method: 'POST',
       body: JSON.stringify({
         pagination: {
-          skip: options.paginationSkip,
-          limit: options.limit,
+          skip: options.paginationSkip || 0,
+          limit: options.limit || 500,
         },
         sort: {
           field: 'players.online',
-          order: options.sortOrder,
+          order: options.sortOrder || 'desc',
         },
       }),
       headers: {
@@ -107,18 +92,6 @@ export class ServerManager extends BaseManager {
       });
   }
 
-  /**
-   * Gets an online server by name or ID.
-   * @param serverIdOrName - The ID or name of the server.
-   * @param options - Options to the method.
-   * @param options.byName - Whether to get the server by its name or not.
-   * @returns A {@link Server} instance or `null` if the server was not found.
-   * @throws {Error} - Will throw an error if a problem occurred.
-   * @example
-   * // Get an online server by name.
-   * const serverManager = client.serverManager;
-   * const server = await serverManager.getOnlineServer('serverName', { byName: true });
-   */
   public async getOnlineServer(
     serverIdOrName: string,
     options: {byName?: boolean} = {byName: false}
@@ -136,15 +109,6 @@ export class ServerManager extends BaseManager {
       });
   }
 
-  /**
-   * Gets all the servers associated with the user.
-   * @return A promise that resolves to the server list of servers associated with the user.
-   * @throws {Error} - Will throw an error if the user is not authenticated.
-   * @example
-   * // Get the user's servers.
-   * const serverManager = client.serverManager;
-   * const servers = await serverManager.getMyServers();
-   */
   public async getMyServers(): Promise<MyServer[]> {
     return await fetch(this.client.BASE_URL + '/user/servers', {
       method: 'GET',
@@ -167,18 +131,6 @@ export class ServerManager extends BaseManager {
       });
   }
 
-  /**
-   * Gets a server associated with the authenticated user by name or ID.
-   * @param serverIdOrName - The ID or name of the server.
-   * @param options - Options to the method.
-   * @param options.byName - Whether to get the server by its name or not.
-   * @returns A {@link MyServer} instance or `null` if the server was not found.
-   * @throws {Error} - Will throw an error if the user is not authenticated.
-   * @example
-   * // Get the user's server by name.
-   * const serverManager = client.serverManager;
-   * const server = await serverManager.getMyServer('serverName', { byName: true });
-   */
   public async getMyServer(
     serverIdOrName: string,
     options: {byName?: boolean} = {byName: false}
@@ -196,17 +148,51 @@ export class ServerManager extends BaseManager {
       });
   }
 
-  /**
-   * Creates a server.
-   * @param serverName - The name of the server.
-   * @param template - The template to use for the server, defaults to "default".
-   * @returns A promise that resolves to a boolean indicating whether the server was created or not.
-   * @throws {Error} - Will throw an error if the user is not authenticated, if the input is invalid, if the server name is already taken, or if the server could not be created.
-   * @example
-   * // Create a server.
-   * const serverManager = client.serverManager;
-   * const created = await serverManager.createServer('serverName');
-   */
+  public async getPlugins(
+    options: {
+      search?: string;
+      paginationSkip?: number;
+      limit?: number;
+      sortOrder?: 'desc' | 'asc';
+    } = {search: '', paginationSkip: 0, limit: 25, sortOrder: 'desc'}
+  ): Promise<Plugin[]> {
+    return await fetch(this.client.BASE_URL + '/plugins/browse', {
+      method: 'POST',
+      body: JSON.stringify({
+        filters: {
+          search: options.search || '',
+        },
+        sort: {
+          field: 'downloads',
+          order: options.sortOrder || 'desc',
+        },
+        pagination: {
+          skip: options.paginationSkip || 0,
+          limit: options.limit || 25,
+        },
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<PluginsResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result.map(plugin => new Plugin(this.client, plugin));
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        }
+
+        return [];
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
   public async createServer(
     serverName: string,
     template = 'default'

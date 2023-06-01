@@ -12,6 +12,7 @@ import {
   ServerKillResponse,
   ServerMotdChangeResponse,
   ServerNameChangeResponse,
+  ServerPluginInstallResponse,
   ServerProperties,
   ServerPropertiesResponse,
   ServerPropertyChangeResponse,
@@ -29,6 +30,8 @@ import {
 } from '../typings';
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
+import {Plugin} from './Plugin';
+import {FileManager} from '../managers';
 
 /**
  * Represents a server of a user.
@@ -71,6 +74,8 @@ export class MyServer extends BaseClass implements MyServerInterface {
     readonly online: PlayerResponse[];
     readonly maxPlayers: number;
   };
+
+  public readonly files = new FileManager(this.client, this);
 
   public constructor(client: Client, data: MyServerResponse) {
     super(client);
@@ -663,6 +668,42 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid state. Server may be in hibernation');
         } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
           throw new Error('No user with that email is found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async installPlugin(plugin: string | Plugin): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/plugins/${this.id}/install`, {
+      method: 'POST',
+      body: JSON.stringify({
+        pluginId: typeof plugin === 'string' ? plugin : plugin.id,
+      }),
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerPluginInstallResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error?.body[0].message);
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Plugin is not found');
         } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
           throw new Error('Internal error');
         } else if (value.status === ResponseStatus.NO_PERMISSION) {

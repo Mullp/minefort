@@ -1,68 +1,26 @@
 import {BaseClass} from './Base';
 import {Client} from '../client';
-import {ArticleAuthorResponse} from '../typings';
+import {ArticleAuthorInterface, ArticleAuthorResponse} from '../typings';
 
 /**
  * Represents an {@link ArticleAuthor}
  * @extends {BaseClass}
  */
-export class ArticleAuthor extends BaseClass {
-  /**
-   * The ID of the author
-   */
+export class ArticleAuthor extends BaseClass implements ArticleAuthorInterface {
   public readonly id: string;
-  /**
-   * The name of the author
-   */
   public readonly name: string;
-  /**
-   * The slug of the author
-   */
   public readonly slug: string;
-  /**
-   * The profile image of the author
-   */
   public readonly profileImage?: string;
-  /**
-   * The cover image of the author
-   */
   public readonly coverImage?: string;
-  /**
-   * The biography of the author
-   */
   public readonly biography?: string;
-  /**
-   * The website of the author
-   */
   public readonly website?: string;
-  /**
-   * The location of the author
-   */
   public readonly location?: string;
-  /**
-   * The Facebook of the author
-   */
   public readonly facebook?: string;
-  /**
-   * The Twitter of the author
-   */
   public readonly twitter?: string;
-  /**
-   * The meta content of the author
-   */
   public readonly metaContent: {
-    /**
-     * The title of the meta content
-     */
     readonly title?: string;
-    /**
-     * The description of the meta content
-     */
     readonly description?: string;
   };
-  /**
-   * The URL of the author
-   */
   public readonly url: string;
 
   public constructor(client: Client, data: ArticleAuthorResponse) {

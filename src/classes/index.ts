@@ -5,3 +5,4 @@ export * from './Server';
 export * from './Article';
 export * from './ArticleAuthor';
 export * from './ArticleTag';
+export * from './Plugin';

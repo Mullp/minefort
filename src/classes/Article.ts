@@ -1,6 +1,6 @@
 import {BaseClass} from './Base';
 import {Client} from '../client';
-import {ArticleResponse} from '../typings';
+import {ArticleInterface, ArticleTypeResponse} from '../typings';
 import {ArticleAuthor} from './ArticleAuthor';
 import {ArticleTag} from './ArticleTag';
 
@@ -8,186 +8,57 @@ import {ArticleTag} from './ArticleTag';
  * Represents an {@link Article}
  * @extends {BaseClass}
  */
-export class Article extends BaseClass {
-  /**
-   * The ID of the article
-   */
+export class Article extends BaseClass implements ArticleInterface {
   public readonly id: string;
-  /**
-   * The UUID of the article
-   */
   public readonly uuid: string;
-  /**
-   * The title of the article
-   */
   public readonly title: string;
-  /**
-   * The slug of the article
-   */
   public readonly slug: string;
-  /**
-   * The HTML content of the article
-   */
   public readonly content: string;
-  /**
-   * The comment ID of the article
-   */
   public readonly commentId: string;
-  /**
-   * The featured image content of the article
-   */
   public readonly featuredImage: {
-    /**
-     * The URL of the featured image
-     */
     readonly url: string;
-    /**
-     * The alt text of the featured image
-     */
     readonly alt?: string;
-    /**
-     * The caption of the featured image
-     */
     readonly caption?: string;
   };
-  /**
-   * Whether the article is featured
-   */
   public readonly featured: boolean;
-  /**
-   * The visibility of the article
-   */
   public readonly visibility: string;
-  /**
-   * The date the article was created
-   */
   public readonly createdAt: Date;
-  /**
-   * The date the article was last updated
-   */
   public readonly updatedAt: Date;
-  /**
-   * The date the article was published
-   */
   public readonly publishedAt: Date;
-  /**
-   * The custom excerpt of the article
-   */
   public readonly customExcerpt?: string;
-  /**
-   * The code injection content of the article
-   */
   public readonly codeInjection: {
-    /**
-     * The code injection head content of the article
-     */
     readonly head?: string;
-    /**
-     * The code injection foot content of the article
-     */
     readonly foot?: string;
   };
-  /**
-   * The custom template of the article
-   */
   public readonly customTemplate?: string;
-  /**
-   * The canonical URL of the article
-   */
   public readonly canonicalUrl?: string;
-  /**
-   * The authors of the article
-   */
   public readonly authors: ArticleAuthor[];
-  /**
-   * The tags of the article
-   */
   public readonly tags: ArticleTag[];
-  /**
-   * The primary author of the article
-   */
   public readonly primaryAuthor: ArticleAuthor;
-  /**
-   * The primary tag of the article
-   */
   public readonly primaryTag: ArticleTag;
-  /**
-   * The URL of the article
-   */
   public readonly url: string;
-  /**
-   * The excerpt of the article
-   */
   public readonly excerpt: string;
-  /**
-   * The reading time of the article
-   */
   public readonly readingTime: number;
-  /**
-   * Whether the article is accessible
-   */
   public readonly access: boolean;
-  /**
-   * Whether comments are enabled on the article
-   */
   public readonly commentsEnabled: boolean;
-  /**
-   * The OG content of the article
-   */
   public readonly ogContent: {
-    /**
-     * The OG image of the article
-     */
     readonly image?: string;
-    /**
-     * The OG title of the article
-     */
     readonly title?: string;
-    /**
-     * The OG description of the article
-     */
     readonly description?: string;
   };
-  /**
-   * The Twitter content of the article
-   */
   public readonly twitterContent: {
-    /**
-     * The Twitter image of the article
-     */
     readonly image?: string;
-    /**
-     * The Twitter title of the article
-     */
     readonly title?: string;
-    /**
-     * The Twitter description of the article
-     */
     readonly description?: string;
   };
-  /**
-   * The meta content of the article
-   */
   public readonly metaContent: {
-    /**
-     * The meta title of the article
-     */
     readonly title?: string;
-    /**
-     * The meta description of the article
-     */
     readonly description?: string;
   };
-  /**
-   * The email subject of the article
-   */
   public readonly emailSubject?: string;
-  /**
-   * The frontmatter of the article
-   */
   public readonly frontmatter?: string;
 
-  public constructor(client: Client, data: ArticleResponse) {
+  public constructor(client: Client, data: ArticleTypeResponse) {
     super(client);
 
     this.id = data.id;

@@ -27,25 +27,3 @@ export type AuthResponse = {
       result: {};
     }
 );
-
-export type MeResponse = {
-  time: number;
-} & (
-  | {
-      status: ResponseStatus.NOT_AUTHENTICATED;
-    }
-  | {
-      status: ResponseStatus.OK;
-      result: {
-        userId: string;
-        emailAddress: string;
-        credits: number;
-        verified: boolean;
-        affiliate: string;
-        ftp: {password: string};
-        status: {
-          twoFactor: boolean;
-        };
-      };
-    }
-);

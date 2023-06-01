@@ -1,11 +1,12 @@
-import {Icon} from '../../classes';
-import {PlayerResponse, SubUserResponse} from '../responses';
+import {Icon, Plugin} from '../../../classes';
 import {
   ServerCategory,
   ServerProperties,
   ServerState,
   SubUserRole,
-} from '../ServerTypings';
+} from '../../ServerTypings';
+import {PlayerResponse, SubUserResponse} from '../../responses';
+import {FileManager} from '../../../managers';
 
 export interface MyServerInterface {
   /**
@@ -135,6 +136,11 @@ export interface MyServerInterface {
      */
     readonly maxPlayers: number;
   };
+
+  /**
+   * The {@link FileManager} used to access file related methods.
+   */
+  readonly files: FileManager;
 
   /**
    * Wakes up the server.
@@ -355,4 +361,20 @@ export interface MyServerInterface {
    * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, or if the server is not found.
    */
   inviteSubUser(email: string, role: SubUserRole): Promise<boolean>;
+
+  /**
+   * Installs a plugin on the server.
+   * @param pluginId - The ID of the plugin to install.
+   * @returns A promise that resolves to a boolean value indicating whether the plugin was successfully installed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, if the server is not found, or if the plugin is not found.
+   */
+  installPlugin(pluginId: string): Promise<boolean>;
+
+  /**
+   * Installs a plugin on the server.
+   * @param plugin - The plugin to install.
+   * @returns A promise that resolves to a boolean value indicating whether the plugin was successfully installed or not.
+   * @throws {Error} - Will throw an error if not authenticated, if invalid input, if the server is in an invalid state, if the server is not found, or if the plugin is not found.
+   */
+  installPlugin(plugin: Plugin): Promise<boolean>;
 }

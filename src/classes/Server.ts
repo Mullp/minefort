@@ -1,56 +1,23 @@
 import {BaseClass} from './Base';
 import {Client} from '../client';
-import {ServerResponse, ServerState} from '../typings';
+import {ServerInterface, ServerResponse, ServerState} from '../typings';
 import {Icon} from './Icon';
 
 /**
- * Represents a server of a user.
+ * Represents a server.
  * @extends {BaseClass}
  */
-export class Server extends BaseClass {
-  /**
-   * The server's ID.
-   */
+export class Server extends BaseClass implements ServerInterface {
   public readonly id: string;
-  /**
-   * The server's name.
-   */
   public readonly name: string;
-  /**
-   * The icon of the server.
-   */
   public readonly icon: Icon;
-  /**
-   * The owner of the server's user ID.
-   */
   public readonly ownerId: string;
-  /**
-   * The version of the server.
-   */
   public readonly version: string;
-  /**
-   * The state of the server.
-   */
   public readonly state: ServerState;
-  /**
-   * The server's MotD also known as "Message of the Day".
-   */
   public readonly motd: string;
-  /**
-   * Information about online players.
-   */
   public readonly playerData: {
-    /**
-     * The amount of online players.
-     */
     readonly playerCount: number;
-    /**
-     * A list of UUIDs representing all online players.
-     */
     readonly online?: string[];
-    /**
-     * The max amount of players allowed online at once.
-     */
     readonly maxPlayers: number;
   };
 

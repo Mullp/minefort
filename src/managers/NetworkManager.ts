@@ -1,28 +1,26 @@
 import {BaseManager} from './BaseManager';
 import {Client} from '../client';
 import fetch from 'cross-fetch';
-import {ResponseStatus} from '../typings';
-import {ArticlesResponse} from '../typings/responses/NetworkResponse';
-import {Article} from '../classes/Article';
+import {
+  NetworkManagerInterface,
+  ResponseStatus,
+  ArticlesResponse,
+  ArticleResponse,
+} from '../typings';
+import {Article} from '../classes';
 
 /**
  * Manages API methods for network-related things and structures.
  * @extends {BaseManager}
  */
-export class NetworkManager extends BaseManager {
+export class NetworkManager
+  extends BaseManager
+  implements NetworkManagerInterface
+{
   public constructor(client: Client) {
     super(client);
   }
 
-  /**
-   * Gets all articles.
-   * @returns A promise that resolves to an array of {@link Article} instances.
-   * @throws {Error} - Will throw an error if an internal error occurs.
-   * @example
-   * // Get all articles.
-   * const articles = await client.networkManager.getArticles();
-   * console.log(articles);
-   */
   public async getArticles(): Promise<Article[]> {
     return await fetch(this.client.BASE_URL + '/blog/articles', {
       method: 'GET',
@@ -42,20 +40,19 @@ export class NetworkManager extends BaseManager {
       });
   }
 
-  /**
-   * Gets an article by its ID.
-   * @param articleId - The ID of the article to get.
-   * @returns An {@link Article} instance or `null` if no article was found.
-   * @throws {Error} - Will throw an error if an internal error occurs.
-   * @example
-   * // Get an article by its ID.
-   * const article = await client.networkManager.getArticle('article ID');
-   * console.log(article);
-   */
-  public async getArticle(articleId: string): Promise<Article | null> {
-    return await this.getArticles()
-      .then(articles => {
-        return articles.find(article => article.id === articleId) ?? null;
+  public async getArticle(slug: string): Promise<Article> {
+    return await fetch(this.client.BASE_URL + '/blog/articles/' + slug, {
+      method: 'GET',
+    })
+      .then(res => res.json() as Promise<ArticleResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return new Article(this.client, value.result);
+        } else if (value.status === ResponseStatus.ENDPOINT_NOT_FOUND) {
+          throw new Error('Article not found');
+        }
+
+        throw new Error('Unknown error');
       })
       .catch(error => {
         throw error;
