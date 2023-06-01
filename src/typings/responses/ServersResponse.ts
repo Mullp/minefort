@@ -611,3 +611,92 @@ export type ServerSubUserInviteResponse = {
       status: ResponseStatus.NO_PERMISSION;
     }
 );
+
+export type FileResponse = {
+  fileName: string;
+  fileType: string;
+};
+
+export type ServerFilesListResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: FileResponse[];
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+);
+
+export type ServerFileCreateResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+);
+
+export type ServerFileDeleteResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+);

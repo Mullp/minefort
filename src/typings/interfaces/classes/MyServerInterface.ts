@@ -6,6 +6,7 @@ import {
   SubUserRole,
 } from '../../ServerTypings';
 import {PlayerResponse, SubUserResponse} from '../../responses';
+import {FileManager} from '../../../managers';
 
 export interface MyServerInterface {
   /**
@@ -135,6 +136,11 @@ export interface MyServerInterface {
      */
     readonly maxPlayers: number;
   };
+
+  /**
+   * The {@link FileManager} used to access file related methods.
+   */
+  readonly files: FileManager;
 
   /**
    * Wakes up the server.

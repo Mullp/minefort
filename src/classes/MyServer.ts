@@ -31,6 +31,7 @@ import {
 import fetch from 'cross-fetch';
 import {Icon} from './Icon';
 import {Plugin} from './Plugin';
+import {FileManager} from '../managers';
 
 /**
  * Represents a server of a user.
@@ -73,6 +74,8 @@ export class MyServer extends BaseClass implements MyServerInterface {
     readonly online: PlayerResponse[];
     readonly maxPlayers: number;
   };
+
+  public readonly files = new FileManager(this.client, this);
 
   public constructor(client: Client, data: MyServerResponse) {
     super(client);
