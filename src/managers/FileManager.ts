@@ -4,11 +4,13 @@ import {
   FileResponse,
   ResponseStatus,
   ServerFileCreateResponse,
+  ServerFileReadResponse,
   ServerFilesListResponse,
 } from '../typings';
 import {MyServer} from '../classes';
 import {Client} from '../client';
 import fetch from 'cross-fetch';
+import {URL} from 'url';
 
 /**
  * Manages API methods for files.
@@ -111,20 +113,18 @@ export class FileManager extends BaseManager implements FileManagerInterface {
   }
 
   public async listFiles(path: string): Promise<FileResponse[]> {
-    return await fetch(
-      this.client.BASE_URL +
-        '/server/' +
-        this.server.id +
-        '/files/list?path=' +
-        this.prependRoot(path),
-      {
-        method: 'GET',
-        headers: {
-          Cookie: this.client.cookie,
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    const url = new URL(
+      this.client.BASE_URL + '/server/' + this.server.id + '/files/list'
+    );
+    url.searchParams.set('path', this.prependRoot(path));
+
+    return await fetch(url, {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
       .then(res => res.json() as Promise<ServerFilesListResponse>)
       .then(value => {
         if (value.status === ResponseStatus.OK) {
@@ -151,7 +151,44 @@ export class FileManager extends BaseManager implements FileManagerInterface {
   }
 
   public async readFile(path: string): Promise<string> {
-    return Promise.resolve('');
+    const splitPath = this.splitPath(this.prependRoot(path));
+
+    const url = new URL(
+      this.client.BASE_URL + '/server/' + this.server.id + '/files/read'
+    );
+    url.searchParams.set('filePath', splitPath.filePath);
+    url.searchParams.set('fileName', splitPath.fileName);
+
+    return await fetch(url, {
+      method: 'GET',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerFileReadResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return value.result;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Item not found, file may not exist');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        }
+
+        throw new Error('Unknown error');
+      })
+      .catch(error => {
+        throw error;
+      });
   }
 
   public async renameFile(path: string, newPath: string): Promise<boolean> {

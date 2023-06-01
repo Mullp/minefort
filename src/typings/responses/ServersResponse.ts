@@ -700,3 +700,31 @@ export type ServerFileDeleteResponse = {
       error: MinefortApiError;
     }
 );
+
+export type ServerFileReadResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: string;
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+);
