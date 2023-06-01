@@ -217,6 +217,20 @@ export interface MyServerInterface {
   delete(password: string): Promise<boolean>;
 
   /**
+   * Repairs the server by resetting default server files.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully repaired or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
+   */
+  repair(): Promise<boolean>;
+
+  /**
+   * Resets the server.
+   * @returns A promise that resolves to a boolean value indicating whether the server was successfully reset or not.
+   * @throws {Error} - Will throw an error if the user is not authenticated, if the server is in an invalid state, or if the server is not found.
+   */
+  reset(): Promise<boolean>;
+
+  /**
    * Gets the server's console output.
    * @returns A promise that resolves to a list of strings representing each line of the console's output.
    * @throws {Error} - Will throw an error if not authenticated, if the server is in an invalid state, or if the server is not found.

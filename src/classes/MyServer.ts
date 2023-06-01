@@ -16,6 +16,8 @@ import {
   ServerProperties,
   ServerPropertiesResponse,
   ServerPropertyChangeResponse,
+  ServerRepairResponse,
+  ServerResetResponse,
   ServerSleepResponse,
   ServerStartResponse,
   ServerState,
@@ -302,6 +304,68 @@ export class MyServer extends BaseClass implements MyServerInterface {
           throw new Error('Invalid credentials');
         } else if (value.status === ResponseStatus.INVALID_STATE) {
           throw new Error('Invalid state. Server may be running');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async repair(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/repair`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerRepairResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
+
+  public async reset(): Promise<boolean> {
+    return await fetch(this.client.BASE_URL + `/server/${this.id}/reset`, {
+      method: 'POST',
+      headers: {
+        Cookie: this.client.cookie,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json() as Promise<ServerResetResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state. Server may be in hibernation');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Server is not found');
         } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
           throw new Error('Internal error');
         } else if (value.status === ResponseStatus.NO_PERMISSION) {
