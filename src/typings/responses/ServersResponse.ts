@@ -728,3 +728,59 @@ export type ServerFileReadResponse = {
       error: MinefortApiError;
     }
 );
+
+export type ServerFileRenameResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+);
+
+export type ServerFileWriteResponse = {
+  time?: number;
+} & (
+  | {
+      status: ResponseStatus.OK;
+      result: {};
+    }
+  | {
+      status: ResponseStatus.NOT_AUTHENTICATED;
+    }
+  | {
+      status: ResponseStatus.INVALID_STATE;
+    }
+  | {
+      status: ResponseStatus.NO_PERMISSION;
+    }
+  | {
+      status: ResponseStatus.ITEM_NOT_FOUND;
+    }
+  | {
+      status: ResponseStatus.INTERNAL_ERROR;
+    }
+  | {
+      status: ResponseStatus.INVALID_INPUT;
+      error: MinefortApiError;
+    }
+);

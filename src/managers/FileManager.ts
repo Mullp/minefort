@@ -5,6 +5,7 @@ import {
   ResponseStatus,
   ServerFileCreateResponse,
   ServerFileReadResponse,
+  ServerFileRenameResponse,
   ServerFilesListResponse,
 } from '../typings';
 import {MyServer} from '../classes';
@@ -191,12 +192,90 @@ export class FileManager extends BaseManager implements FileManagerInterface {
       });
   }
 
-  public async renameFile(path: string, newPath: string): Promise<boolean> {
-    return Promise.resolve(false);
+  public async renameFile(path: string, newName: string): Promise<boolean> {
+    const splitPath = this.splitPath(this.prependRoot(path));
+
+    return await fetch(
+      this.client.BASE_URL + '/server/' + this.server.id + '/files/rename',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          filePath: splitPath.filePath,
+          fileName: splitPath.fileName,
+          newFileName: newName,
+        }),
+        headers: {
+          Cookie: this.client.cookie,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then(res => res.json() as Promise<ServerFileRenameResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Item not found, file may not exist');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
   }
 
   public async writeFile(path: string, content: string): Promise<boolean> {
-    return Promise.resolve(false);
+    const splitPath = this.splitPath(this.prependRoot(path));
+
+    return await fetch(
+      this.client.BASE_URL + '/server/' + this.server.id + '/files/write',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          filePath: splitPath.filePath,
+          fileName: splitPath.fileName,
+          content: content,
+        }),
+        headers: {
+          Cookie: this.client.cookie,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+      .then(res => res.json() as Promise<ServerFileRenameResponse>)
+      .then(value => {
+        if (value.status === ResponseStatus.OK) {
+          return true;
+        } else if (value.status === ResponseStatus.NOT_AUTHENTICATED) {
+          throw new Error('Not authenticated');
+        } else if (value.status === ResponseStatus.INVALID_STATE) {
+          throw new Error('Invalid state');
+        } else if (value.status === ResponseStatus.NO_PERMISSION) {
+          throw new Error('No permission');
+        } else if (value.status === ResponseStatus.ITEM_NOT_FOUND) {
+          throw new Error('Item not found, file may not exist');
+        } else if (value.status === ResponseStatus.INTERNAL_ERROR) {
+          throw new Error('Internal error');
+        } else if (value.status === ResponseStatus.INVALID_INPUT) {
+          throw new Error('Invalid input: ' + value.error.body[0].message);
+        }
+
+        return false;
+      })
+      .catch(error => {
+        throw error;
+      });
   }
 
   /**

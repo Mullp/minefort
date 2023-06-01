@@ -43,11 +43,11 @@ export interface FileManagerInterface {
   /**
    * Renames a file.
    * @param path - The path to the file to rename.
-   * @param newPath - The new path to the file.
+   * @param newName - The new name of the file.
    * @return A promise that resolves to a boolean indicating whether the file was renamed.
    * @throws {Error} - Throws an error.
    */
-  renameFile(path: string, newPath: string): Promise<boolean>;
+  renameFile(path: string, newName: string): Promise<boolean>;
 
   /**
    * Creates a file.
