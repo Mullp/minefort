@@ -4,9 +4,11 @@ import {
   FileResponse,
   ResponseStatus,
   ServerFileCreateResponse,
+  ServerFileDeleteResponse,
   ServerFileReadResponse,
   ServerFileRenameResponse,
   ServerFilesListResponse,
+  ServerFileWriteResponse,
 } from '../typings';
 import {MyServer} from '../classes';
 import {Client} from '../client';
@@ -88,7 +90,7 @@ export class FileManager extends BaseManager implements FileManagerInterface {
         },
       }
     )
-      .then(res => res.json() as Promise<ServerFileCreateResponse>)
+      .then(res => res.json() as Promise<ServerFileDeleteResponse>)
       .then(value => {
         if (value.status === ResponseStatus.OK) {
           return true;
@@ -253,7 +255,7 @@ export class FileManager extends BaseManager implements FileManagerInterface {
         },
       }
     )
-      .then(res => res.json() as Promise<ServerFileRenameResponse>)
+      .then(res => res.json() as Promise<ServerFileWriteResponse>)
       .then(value => {
         if (value.status === ResponseStatus.OK) {
           return true;
